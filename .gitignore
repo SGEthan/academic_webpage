@@ -1,6 +1,10 @@
 # Deployment output
 _deploy/
 
+# Gallery photos (keep manifest tracked)
+assets/gallery/*
+!assets/gallery/gallery.json
+
 # OS files
 .DS_Store
 Thumbs.db
