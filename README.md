@@ -2,6 +2,8 @@
 
 This folder contains a from-scratch static academic homepage.
 
+This repo is 100% developed with Cursor. Please let me know if there is any infringement issue.
+
 ## Included sections
 
 - About (personal introduction)
