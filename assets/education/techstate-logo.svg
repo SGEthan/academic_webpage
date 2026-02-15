@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Tech State University logo">
+  <defs>
+    <linearGradient id="tsg" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#17523f" />
+      <stop offset="100%" stop-color="#2fa884" />
+    </linearGradient>
+  </defs>
+  <rect width="240" height="240" rx="32" fill="url(#tsg)" />
+  <path d="M52 68h136v22h-57v84h-22V90H52z" fill="#e6fff6" />
+  <circle cx="120" cy="176" r="18" fill="#e6fff6" />
+</svg>

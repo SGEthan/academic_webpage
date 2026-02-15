@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gallery | Yichuan Deng</title>
+    <meta
+      name="description"
+      content="Photo gallery of Yichuan Deng."
+    />
+    <link rel="icon" type="image/svg+xml" href="assets/education/uw-logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="logo" href="index.html">Yichuan Deng</a>
+        <div class="nav-actions">
+          <nav aria-label="Main navigation">
+            <a href="index.html#about">About</a>
+            <a href="index.html#publications">Publications</a>
+            <a href="index.html#gallery">Gallery</a>
+          </nav>
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle color theme">
+            Auto
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section container gallery-page-section" style="padding-top: 5rem">
+        <div class="section-title">
+          <h2>Photo Gallery</h2>
+          <p>A full collection of photos. Click any image to preview.</p>
+          <a class="view-all-btn" href="index.html#gallery">← Back to Homepage Gallery</a>
+        </div>
+        <div class="gallery-page-grid" data-gallery-page>
+          <figure class="gallery-card gallery-loading">
+            <figcaption>Loading gallery...</figcaption>
+          </figure>
+        </div>
+      </section>
+    </main>
+
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+      <div class="lightbox-backdrop" data-close="true"></div>
+      <div class="lightbox-content" role="dialog" aria-modal="true" aria-label="Gallery image viewer">
+        <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close image viewer">×</button>
+        <button class="lightbox-nav lightbox-prev" id="lightbox-prev" type="button" aria-label="Previous image">‹</button>
+        <img id="lightbox-image" src="" alt="" />
+        <button class="lightbox-nav lightbox-next" id="lightbox-next" type="button" aria-label="Next image">›</button>
+        <p id="lightbox-caption"></p>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <p>© 2026 Yichuan Deng • University of Washington</p>
+        <a href="index.html#top">Back to home</a>
+      </div>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>

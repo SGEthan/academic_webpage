@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yichuan Deng | Academic Homepage</title>
+    <meta
+      name="description"
+      content="Static academic homepage with bio, selected publications, and gallery."
+    />
+    <link rel="icon" type="image/svg+xml" href="assets/education/uw-logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="logo" href="#top">Yichuan Deng</a>
+        <div class="nav-actions">
+          <nav aria-label="Main navigation">
+            <a href="#about">About</a>
+            <a href="#publications">Publications</a>
+            <a href="#gallery">Gallery</a>
+          </nav>
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle color theme">
+            Auto
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero container" id="about">
+        <div class="hero-content">
+          <h1>About</h1>
+          <p class="lead">
+            I have a general interest in Computer Vision and Generative Models, for both the image and language domains. Within Computer Vision, I focus on 3D tasks, such as pose estimation, scene understanding, and reconstruction. I am also particularly interested in generating 3D-consistent content. Regarding language models, I am interested in training and fine-tuning techniques from both theoretical and engineering perspectives. 
+          </p>
+          
+          <p class="lead">
+            Previously, during my undergraduate studies and the first two years of my Ph.D., I focused on Theoretical Computer Science, conducting research in data structures, numerical linear algebra, and algorithms. I earned my B.Eng. from the School of the Gifted Young at the University of Science and Technology of China (USTC).
+          </p>
+
+          <p class="lead">
+            I enjoy photography a lot. Check out my <a href="gallery.html">full gallery</a> for more photos!
+          </p>
+          <div class="contact-row">
+            <a
+              class="social-icon"
+              href="mailto:ycdeng AT cs.washington.edu"
+              aria-label="Email"
+              title="Email"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 6h18v12H3z" fill="none" stroke="currentColor" stroke-width="1.8" />
+                <path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" />
+              </svg>
+            </a>
+            <a
+              class="social-icon"
+              href="https://scholar.google.com/citations?user=PaVHuCoAAAAJ&hl=en"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Google Scholar"
+              title="Google Scholar"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3 2.5 9 12 15 21.5 9z" fill="currentColor" />
+                <circle cx="12" cy="16.8" r="4" fill="none" stroke="currentColor" stroke-width="1.8" />
+                <path d="M16 20.5v-2.3" fill="none" stroke="currentColor" stroke-width="1.8" />
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div class="hero-side">
+          <div class="hero-photo-card">
+            <img
+              class="profile-photo"
+              src="assets/profile-photo.jpg"
+              alt="Portrait of Yichuan Deng"
+            />
+            <div class="profile-meta">
+              <p class="profile-name">Yichuan (Ethan) Deng</p>
+              <p class="profile-title">Ph.D. Student</p>
+            </div>
+          </div>
+          <div class="hero-card">
+            <h2>Research Interests</h2>
+            <ul>
+              <li>3D Computer Vision</li>
+              <li>Reconstruction, Scene Understanding</li>
+              <li>Pose Estimation</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="about-education" id="education">
+          <div class="section-title">
+            <h2>Education</h2>
+          </div>
+          <div class="education-list">
+            <article class="education-item">
+              <img
+                class="school-logo"
+                src="assets/education/uw-logo.svg"
+                alt="University of Washington logo"
+              />
+              <div>
+                <h3>Ph.D. in Computer Science and Engineering</h3>
+                <p class="edu-year">2023-2028 (expected)</p>
+                <a
+                  class="edu-college"
+                  href="https://www.cs.washington.edu/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Paul G. Allen School of Computer Science and Engineering
+                </a>
+                <a
+                  class="edu-school"
+                  href="https://www.washington.edu/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  University of Washington
+                </a>
+              </div>
+            </article>
+
+            <article class="education-item">
+              <img
+                class="school-logo"
+                src="assets/education/ustc-logo.svg"
+                alt="University of Science and Technology of China logo"
+              />
+              <div>
+                <h3>B.Eng. in Computer Science and Technology</h3>
+                <p class="edu-year">2019-2023</p>
+                <a
+                  class="edu-college"
+                  href="https://sgy.ustc.edu.cn/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  School of the Gifted Young
+                </a>
+                <a
+                  class="edu-school"
+                  href="https://www.ustc.edu.cn/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  University of Science and Technology of China
+                </a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section container" id="publications">
+        <div class="section-title">
+          <h2>Selected Publications</h2>
+        </div>
+        <div class="pub-list" id="selected-publications" data-publications="selected" data-limit="3">
+          <article class="pub-item pub-loading">
+            <p>Loading publications from BibTeX...</p>
+          </article>
+        </div>
+        <a class="view-all-btn" href="publications.html">View Full Publications →</a>
+      </section>
+
+      <section class="section container" id="gallery">
+        <div class="section-title">
+          <h2>Gallery</h2>
+        </div>
+        <div class="gallery-carousel">
+          <button class="gallery-page-btn" id="gallery-prev" type="button" aria-label="Previous gallery page">‹</button>
+          <div class="gallery-viewport">
+            <div class="gallery-track" id="auto-gallery" data-gallery-auto>
+              <figure class="gallery-card gallery-loading">
+                <figcaption>Loading gallery...</figcaption>
+              </figure>
+            </div>
+          </div>
+          <button class="gallery-page-btn" id="gallery-next" type="button" aria-label="Next gallery page">›</button>
+        </div>
+        <a class="view-all-btn" href="gallery.html">Open Full Gallery →</a>
+      </section>
+    </main>
+
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+      <div class="lightbox-backdrop" data-close="true"></div>
+      <div class="lightbox-content" role="dialog" aria-modal="true" aria-label="Gallery image viewer">
+        <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close image viewer">×</button>
+        <button class="lightbox-nav lightbox-prev" id="lightbox-prev" type="button" aria-label="Previous image">‹</button>
+        <img id="lightbox-image" src="" alt="" />
+        <button class="lightbox-nav lightbox-next" id="lightbox-next" type="button" aria-label="Next image">›</button>
+        <p id="lightbox-caption"></p>
+      </div>
+    </div>
+
+    <div class="bibtex-modal" id="bibtex-modal" aria-hidden="true">
+      <div class="bibtex-backdrop"></div>
+      <div class="bibtex-content" role="dialog" aria-modal="true" aria-label="BibTeX viewer">
+        <button class="bibtex-close" id="bibtex-close" type="button" aria-label="Close BibTeX dialog">×</button>
+        <h3>BibTeX</h3>
+        <pre id="bibtex-code"></pre>
+        <button class="copy-bibtex-btn" id="copy-bibtex-btn" type="button">Copy</button>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <p>© 2026 Yichuan Deng • University of Washington</p>
+        <a href="#top">Back to top</a>
+      </div>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>

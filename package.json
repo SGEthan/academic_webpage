@@ -1,0 +1,10 @@
+{
+  "name": "site-from-scratch",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "preview": "powershell -ExecutionPolicy Bypass -File ./preview.ps1",
+    "preview:8080": "powershell -ExecutionPolicy Bypass -File ./preview.ps1 -Port 8080",
+    "deploy": "powershell -ExecutionPolicy Bypass -File ./scripts/build-deploy.ps1"
+  }
+}

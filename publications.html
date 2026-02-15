@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Publications | Yichuan Deng</title>
+    <meta name="description" content="Full publication list for Yichuan Deng." />
+    <link rel="icon" type="image/svg+xml" href="assets/education/uw-logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="logo" href="index.html">Yichuan Deng</a>
+        <div class="nav-actions">
+          <nav aria-label="Main navigation">
+            <a href="index.html#about">About</a>
+            <a href="index.html#publications">Publications</a>
+            <a href="index.html#gallery">Gallery</a>
+          </nav>
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle color theme">
+            Auto
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section container" style="padding-top: 5rem">
+        <div class="section-title">
+          <h2>Full Publications</h2>
+          <p>Journal articles, conference papers, and preprints.</p>
+          <a class="view-all-btn" href="index.html#publications">← Back to Selected</a>
+        </div>
+
+        <div class="pub-list" id="all-publications" data-publications="all">
+          <article class="pub-item pub-loading">
+            <p>Loading publications from BibTeX...</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <div class="bibtex-modal" id="bibtex-modal" aria-hidden="true">
+      <div class="bibtex-backdrop"></div>
+      <div class="bibtex-content" role="dialog" aria-modal="true" aria-label="BibTeX viewer">
+        <button class="bibtex-close" id="bibtex-close" type="button" aria-label="Close BibTeX dialog">×</button>
+        <h3>BibTeX</h3>
+        <pre id="bibtex-code"></pre>
+        <button class="copy-bibtex-btn" id="copy-bibtex-btn" type="button">Copy</button>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <p>© 2026 Yichuan Deng • University of Washington</p>
+        <a href="index.html#top">Back to home</a>
+      </div>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>
