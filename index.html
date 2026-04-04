@@ -20,7 +20,7 @@
   <body>
     <header class="site-header">
       <div class="container nav-wrap">
-        <a class="logo" href="#top">Yichuan Deng</a>
+        <a class="logo" id="site-logo" href="#top"></a>
         <div class="nav-actions">
           <nav aria-label="Main navigation">
             <a href="#about">About</a>
@@ -38,64 +38,27 @@
       <section class="hero container" id="about">
         <div class="hero-content">
           <h1>About</h1>
-          <p class="lead">
-            I have a general interest in Computer Vision and Generative Models, for both the image and language domains. Within Computer Vision, I focus on 3D tasks, such as pose estimation, scene understanding, and reconstruction. I am also particularly interested in generating 3D-consistent content. Regarding language models, I am interested in training and fine-tuning techniques from both theoretical and engineering perspectives. 
-          </p>
-          
-          <p class="lead">
-            Previously, during my undergraduate studies and the first two years of my Ph.D., I focused on Theoretical Computer Science, conducting research in data structures, numerical linear algebra, and algorithms. I earned my B.Eng. from the School of the Gifted Young at the University of Science and Technology of China (USTC).
-          </p>
-
-          <p class="lead">
-            I enjoy photography a lot. Check out my <a href="gallery.html">full gallery</a> for more photos!
-          </p>
-          <div class="contact-row">
-            <a
-              class="social-icon"
-              href="mailto:ycdeng AT cs.washington.edu"
-              aria-label="Email"
-              title="Email"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M3 6h18v12H3z" fill="none" stroke="currentColor" stroke-width="1.8" />
-                <path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" />
-              </svg>
-            </a>
-            <a
-              class="social-icon"
-              href="https://scholar.google.com/citations?user=PaVHuCoAAAAJ&hl=en"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Google Scholar"
-              title="Google Scholar"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 3 2.5 9 12 15 21.5 9z" fill="currentColor" />
-                <circle cx="12" cy="16.8" r="4" fill="none" stroke="currentColor" stroke-width="1.8" />
-                <path d="M16 20.5v-2.3" fill="none" stroke="currentColor" stroke-width="1.8" />
-              </svg>
-            </a>
+          <div id="about-text">
+            <p class="lead">Loading...</p>
           </div>
+          <div class="contact-row" id="contact-row"></div>
         </div>
         <div class="hero-side">
           <div class="hero-photo-card">
             <img
               class="profile-photo"
-              src="assets/profile-photo.jpg"
-              alt="Portrait of Yichuan Deng"
+              id="profile-photo"
+              src=""
+              alt=""
             />
             <div class="profile-meta">
-              <p class="profile-name">Yichuan (Ethan) Deng</p>
-              <p class="profile-title">Ph.D. Student</p>
+              <p class="profile-name" id="profile-name"></p>
+              <p class="profile-title" id="profile-title"></p>
             </div>
           </div>
           <div class="hero-card">
             <h2>Research Interests</h2>
-            <ul>
-              <li>3D Computer Vision</li>
-              <li>Reconstruction, Scene Understanding</li>
-              <li>Pose Estimation</li>
-            </ul>
+            <ul id="research-interests"></ul>
           </div>
         </div>
 
@@ -103,63 +66,7 @@
           <div class="section-title">
             <h2>Education</h2>
           </div>
-          <div class="education-list">
-            <article class="education-item">
-              <img
-                class="school-logo"
-                src="assets/education/uw-logo.svg"
-                alt="University of Washington logo"
-              />
-              <div>
-                <h3>Ph.D. in Computer Science and Engineering</h3>
-                <p class="edu-year">2023-2028 (expected)</p>
-                <a
-                  class="edu-college"
-                  href="https://www.cs.washington.edu/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Paul G. Allen School of Computer Science and Engineering
-                </a>
-                <a
-                  class="edu-school"
-                  href="https://www.washington.edu/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  University of Washington
-                </a>
-              </div>
-            </article>
-
-            <article class="education-item">
-              <img
-                class="school-logo"
-                src="assets/education/ustc-logo.svg"
-                alt="University of Science and Technology of China logo"
-              />
-              <div>
-                <h3>B.Eng. in Computer Science and Technology</h3>
-                <p class="edu-year">2019-2023</p>
-                <a
-                  class="edu-college"
-                  href="https://sgy.ustc.edu.cn/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  School of the Gifted Young
-                </a>
-                <a
-                  class="edu-school"
-                  href="https://www.ustc.edu.cn/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  University of Science and Technology of China
-                </a>
-              </div>
-            </article>
-          </div>
+          <div class="education-list" id="education-list"></div>
         </div>
       </section>
 
@@ -217,7 +124,7 @@
 
     <footer class="site-footer">
       <div class="container footer-wrap">
-        <p>© 2026 Yichuan Deng • University of Washington</p>
+        <p id="footer-text"></p>
         <a href="#top">Back to top</a>
       </div>
     </footer>

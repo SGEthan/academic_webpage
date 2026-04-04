@@ -1271,8 +1271,212 @@
     });
   }
 
+  // ---------------------------------------------------------------------------
+  // Content from Markdown
+  // ---------------------------------------------------------------------------
+
+  function parseContentFrontmatter(raw) {
+    const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+    if (!match) return { meta: {}, body: raw };
+
+    const yamlBlock = match[1];
+    const body = match[2].trim();
+    const meta = {};
+    let currentKey = null;
+    let currentList = null;
+    let currentObj = null;
+
+    for (const line of yamlBlock.split(/\r?\n/)) {
+      // List item with key:value (nested object field)
+      const nestedMatch = line.match(/^    (\w[\w_]*):\s*(.*)$/);
+      if (nestedMatch && currentList !== null) {
+        if (currentObj) currentObj[nestedMatch[1]] = nestedMatch[2].trim();
+        continue;
+      }
+
+      // List item (simple or start of object)
+      const listMatch = line.match(/^  - (?:(\w[\w_]*):\s*(.*)|(.*))$/);
+      if (listMatch && currentKey) {
+        if (!currentList) {
+          currentList = [];
+          meta[currentKey] = currentList;
+        }
+        if (listMatch[1]) {
+          // Start of object item: "  - key: value"
+          currentObj = { [listMatch[1]]: listMatch[2].trim() };
+          currentList.push(currentObj);
+        } else {
+          // Simple list item: "  - value"
+          currentObj = null;
+          currentList.push(listMatch[3].trim());
+        }
+        continue;
+      }
+
+      // Top-level key: value
+      const kvMatch = line.match(/^(\w[\w_]*):\s*(.*)$/);
+      if (kvMatch) {
+        currentKey = kvMatch[1];
+        currentObj = null;
+        currentList = null;
+        const val = kvMatch[2].trim();
+        if (val) {
+          meta[currentKey] = val;
+        }
+        continue;
+      }
+    }
+
+    return { meta, body };
+  }
+
+  function markdownToHtml(md) {
+    return md
+      .split(/\n{2,}/)
+      .map((block) => {
+        const html = block
+          .trim()
+          .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+          .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+          .replace(/\*(.+?)\*/g, "<em>$1</em>");
+        return `<p class="lead">${html}</p>`;
+      })
+      .filter((p) => p !== '<p class="lead"></p>')
+      .join("\n");
+  }
+
+  const EMAIL_SVG = `<svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M3 6h18v12H3z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+    <path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+  </svg>`;
+
+  const SCHOLAR_SVG = `<svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12 3 2.5 9 12 15 21.5 9z" fill="currentColor"/>
+    <circle cx="12" cy="16.8" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/>
+    <path d="M16 20.5v-2.3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+  </svg>`;
+
+  function populateContent(meta, bodyHtml) {
+    // Logo / name
+    const logo = document.getElementById("site-logo");
+    if (logo) logo.textContent = meta.name?.split("(")[0]?.trim() || meta.name || "";
+
+    // About text
+    const aboutText = document.getElementById("about-text");
+    if (aboutText) aboutText.innerHTML = bodyHtml;
+
+    // Profile card
+    const photo = document.getElementById("profile-photo");
+    if (photo && meta.photo) { photo.src = meta.photo; photo.alt = "Portrait of " + (meta.name || ""); }
+    const pName = document.getElementById("profile-name");
+    if (pName) pName.textContent = meta.name || "";
+    const pTitle = document.getElementById("profile-title");
+    if (pTitle) pTitle.textContent = meta.title || "";
+
+    // Contact row
+    const contactRow = document.getElementById("contact-row");
+    if (contactRow) {
+      contactRow.innerHTML = "";
+      if (meta.email) {
+        const a = document.createElement("a");
+        a.className = "social-icon";
+        a.href = "mailto:" + meta.email;
+        a.setAttribute("aria-label", "Email");
+        a.title = "Email";
+        a.innerHTML = EMAIL_SVG;
+        contactRow.appendChild(a);
+      }
+      if (meta.scholar) {
+        const a = document.createElement("a");
+        a.className = "social-icon";
+        a.href = meta.scholar;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.setAttribute("aria-label", "Google Scholar");
+        a.title = "Google Scholar";
+        a.innerHTML = SCHOLAR_SVG;
+        contactRow.appendChild(a);
+      }
+    }
+
+    // Research interests
+    const riList = document.getElementById("research-interests");
+    if (riList && Array.isArray(meta.research_interests)) {
+      riList.innerHTML = "";
+      meta.research_interests.forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        riList.appendChild(li);
+      });
+    }
+
+    // Education
+    const eduList = document.getElementById("education-list");
+    if (eduList && Array.isArray(meta.education)) {
+      eduList.innerHTML = "";
+      meta.education.forEach((edu) => {
+        const article = document.createElement("article");
+        article.className = "education-item";
+
+        const img = document.createElement("img");
+        img.className = "school-logo";
+        img.src = edu.logo || "";
+        img.alt = edu.logo_alt || "";
+
+        const div = document.createElement("div");
+
+        const h3 = document.createElement("h3");
+        h3.textContent = edu.degree || "";
+
+        const year = document.createElement("p");
+        year.className = "edu-year";
+        year.textContent = edu.year || "";
+
+        const college = document.createElement("a");
+        college.className = "edu-college";
+        college.href = edu.college_url || "#";
+        college.target = "_blank";
+        college.rel = "noopener noreferrer";
+        college.textContent = edu.college || "";
+
+        const school = document.createElement("a");
+        school.className = "edu-school";
+        school.href = edu.school_url || "#";
+        school.target = "_blank";
+        school.rel = "noopener noreferrer";
+        school.textContent = edu.school || "";
+
+        div.append(h3, year, college, school);
+        article.append(img, div);
+        eduList.appendChild(article);
+      });
+    }
+
+    // Footer
+    const footer = document.getElementById("footer-text");
+    if (footer) footer.textContent = meta.footer || "";
+  }
+
+  async function initContentFromMarkdown() {
+    try {
+      const response = await fetch("content.md", { cache: "no-store" });
+      if (!response.ok) throw new Error("Failed to load content.md: " + response.status);
+      const raw = await response.text();
+      const { meta, body } = parseContentFrontmatter(raw);
+      const bodyHtml = markdownToHtml(body);
+      populateContent(meta, bodyHtml);
+    } catch (err) {
+      console.error("Content loading failed:", err);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Init
+  // ---------------------------------------------------------------------------
+
   initThemeToggle();
   initSmoothAnchorScroll();
+  initContentFromMarkdown();
   const galleryApi = initGalleryLightbox();
   const carouselApi = initGalleryCarousel();
   initGalleryFromManifest(galleryApi).then(() => {

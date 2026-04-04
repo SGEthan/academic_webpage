@@ -28,6 +28,7 @@ $copyList = @(
   "gallery.html",
   "styles.css",
   "script.js",
+  "content.md",
   "assets",
   "bibtex"
 )
