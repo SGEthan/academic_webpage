@@ -1010,7 +1010,7 @@
   }
 
   const EXTRA_LINK_FIELDS = ["poster", "talk", "dataset", "code", "slides", "video", "website", "project"];
-  const NON_CITE_FIELDS = new Set(["tag", ...EXTRA_LINK_FIELDS, "url"]);
+  const NON_CITE_FIELDS = new Set(["tag", "selected", "topic", ...EXTRA_LINK_FIELDS, "url"]);
 
   function splitTags(rawTag) {
     if (!rawTag) return [];
