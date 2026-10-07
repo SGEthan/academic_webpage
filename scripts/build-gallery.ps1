@@ -8,6 +8,20 @@ if ([string]::IsNullOrWhiteSpace($SiteRoot)) {
   $SiteRoot = Split-Path -Parent $PSScriptRoot
 }
 
+# Prefer the cross-platform builder: it preserves metadata and generates WebP
+# thumbnails, display images, and intrinsic dimensions without changing originals.
+foreach ($pythonName in @("python3", "python")) {
+  $pythonCommand = Get-Command $pythonName -ErrorAction SilentlyContinue
+  if ($pythonCommand) {
+    & $pythonCommand.Source -c "from PIL import Image" 2>$null
+    if ($LASTEXITCODE -eq 0) {
+      & $pythonCommand.Source (Join-Path $PSScriptRoot "build-gallery.py") --site-root $SiteRoot
+      if ($LASTEXITCODE -ne 0) { throw "Gallery generation failed." }
+      exit 0
+    }
+  }
+}
+
 $galleryDir = Join-Path $SiteRoot "assets/gallery"
 $thumbDir = Join-Path $galleryDir "thumbs"
 $manifestPath = Join-Path $galleryDir "gallery.json"

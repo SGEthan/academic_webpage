@@ -6,8 +6,11 @@
     <title>Yichuan Deng | Academic Homepage</title>
     <meta
       name="description"
-      content="Static academic homepage with bio, selected publications, and gallery."
+      content="Yichuan (Ethan) Deng, Ph.D. student at the University of Washington. Research in 3D computer vision, vision-language models, and embodied AI."
     />
+    <meta property="og:title" content="Yichuan (Ethan) Deng" />
+    <meta property="og:description" content="Ph.D. student at the University of Washington working on 3D computer vision, vision-language models, and embodied AI." />
+    <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href="assets/education/uw-logo.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,12 +18,12 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=61fcd5f2633f" />
   </head>
   <body>
     <header class="site-header">
       <div class="container nav-wrap">
-        <a class="logo" id="site-logo" href="#top"></a>
+        <a class="logo" id="site-logo" href="#top">Yichuan Deng</a>
         <div class="nav-actions">
           <nav aria-label="Main navigation">
             <a href="#about">About</a>
@@ -37,28 +40,38 @@
     <main id="top">
       <section class="hero container" id="about">
         <div class="hero-content">
-          <h1>About</h1>
-          <div id="about-text">
-            <p class="lead">Loading...</p>
+          <div class="hero-heading">
+            <h1 id="profile-name">Yichuan (Ethan) Deng</h1>
+            <p class="profile-title"><span id="profile-title">Ph.D. Student</span><span class="identity-separator" aria-hidden="true">·</span><span id="profile-affiliation">University of Washington</span></p>
+            <div class="contact-row" id="contact-row"></div>
           </div>
-          <div class="contact-row" id="contact-row"></div>
+          <div class="hero-about" id="about-text">
+            <p class="lead">My research lies at the intersection of 3D computer vision, vision-language models, and embodied AI. I am particularly interested in building structured and persistent representations of the physical world that enable models to ground language, maintain memory over long-horizon visual streams, and perform spatial reasoning.</p>
+            <p class="lead">During my undergraduate studies and the first two years of my Ph.D., I worked primarily on theoretical computer science, with a focus on data structures, numerical linear algebra, and algorithms. I received my B.Eng. in Computer Science and Technology from the School of the Gifted Young at the University of Science and Technology of China (USTC).</p>
+            <p class="lead">Outside of research, I enjoy photography. You can find a selection of my work in the <a href="gallery.html">gallery</a>.</p>
+          </div>
         </div>
         <div class="hero-side">
           <div class="hero-photo-card">
             <img
               class="profile-photo"
               id="profile-photo"
-              src=""
-              alt=""
+              src="assets/profile-photo-400.webp"
+              srcset="assets/profile-photo-400.webp 400w, assets/profile-photo-800.webp 800w"
+              sizes="(max-width: 900px) 160px, 200px"
+              alt="Portrait of Yichuan Deng"
+              width="200"
+              height="200"
+              fetchpriority="high"
             />
-            <div class="profile-meta">
-              <p class="profile-name" id="profile-name"></p>
-              <p class="profile-title" id="profile-title"></p>
-            </div>
           </div>
           <div class="hero-card">
             <h2>Research Interests</h2>
-            <ul id="research-interests"></ul>
+            <ul id="research-interests">
+              <li>3D Computer Vision</li>
+              <li>Visual Understanding</li>
+              <li>Generative Model Training &amp; Fine-tuning</li>
+            </ul>
           </div>
         </div>
 
@@ -74,7 +87,7 @@
         <div class="section-title">
           <h2>Selected Publications</h2>
         </div>
-        <div class="pub-list" id="selected-publications" data-publications="selected" data-limit="3">
+        <div class="pub-list" id="selected-publications" data-publications="selected">
           <article class="pub-item pub-loading">
             <p>Loading publications from BibTeX...</p>
           </article>
@@ -84,18 +97,32 @@
 
       <section class="section container" id="gallery">
         <div class="section-title">
-          <h2>Gallery</h2>
+          <h2>Gallery Preview</h2>
+          <p>A few moments from behind the camera. Drag or swipe to explore.</p>
         </div>
-        <div class="gallery-carousel">
-          <button class="gallery-page-btn" id="gallery-prev" type="button" aria-label="Previous gallery page">‹</button>
-          <div class="gallery-viewport">
+        <div class="gallery-carousel" role="region" aria-label="Photography highlights" aria-roledescription="carousel">
+          <div class="gallery-controls">
+            <button class="gallery-page-btn gallery-autoplay-btn" id="gallery-autoplay" type="button" aria-label="Pause automatic slideshow" title="Pause automatic slideshow">
+              <span id="gallery-autoplay-icon" aria-hidden="true">Ⅱ</span>
+            </button>
+            <button class="gallery-page-btn" id="gallery-prev" type="button" aria-label="Previous photo">
+              <span aria-hidden="true">←</span>
+            </button>
+            <div class="gallery-position" id="gallery-position" aria-live="off" aria-atomic="true">
+              <span class="gallery-counter"><span id="gallery-current">01</span> / <span id="gallery-total">00</span></span>
+              <span class="gallery-progress" aria-hidden="true"><span id="gallery-progress-fill"></span></span>
+            </div>
+            <button class="gallery-page-btn" id="gallery-next" type="button" aria-label="Next photo">
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+          <div class="gallery-viewport" tabindex="0" aria-label="Photos. Use left and right arrow keys to navigate.">
             <div class="gallery-track" id="auto-gallery" data-gallery-auto>
               <figure class="gallery-card gallery-loading">
                 <figcaption>Loading gallery...</figcaption>
               </figure>
             </div>
           </div>
-          <button class="gallery-page-btn" id="gallery-next" type="button" aria-label="Next gallery page">›</button>
         </div>
         <a class="view-all-btn" href="gallery.html">Open Full Gallery →</a>
       </section>
@@ -128,6 +155,11 @@
         <a href="#top">Back to top</a>
       </div>
     </footer>
-    <script src="script.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/embla-carousel@8.6.0/embla-carousel.umd.js"
+      integrity="sha384-XGqLM9+dJ+PFOMZn6IuZgRRIoxcAT5fx4eIZCx7K3O2Dj5RA7EOlJ3yOS8Jd+kiY"
+      crossorigin="anonymous"
+    ></script>
+    <script src="script.js?v=30ca1817111a"></script>
   </body>
 </html>

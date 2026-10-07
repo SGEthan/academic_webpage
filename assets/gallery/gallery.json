@@ -1,170 +1,974 @@
-﻿[
-    {
-        "src":  "assets/gallery/174A0921.jpg",
-        "thumb":  "assets/gallery/thumbs/174A0921.jpg",
-        "alt":  "174A0921",
-        "caption":  "174A0921"
-    },
-    {
-        "src":  "assets/gallery/174A1604.jpg",
-        "thumb":  "assets/gallery/thumbs/174A1604.jpg",
-        "alt":  "174A1604",
-        "caption":  "174A1604"
-    },
-    {
-        "src":  "assets/gallery/174A3427.jpg",
-        "thumb":  "assets/gallery/thumbs/174A3427.jpg",
-        "alt":  "174A3427",
-        "caption":  "174A3427"
-    },
-    {
-        "src":  "assets/gallery/174A4665 (1).jpg",
-        "thumb":  "assets/gallery/thumbs/174A4665 (1).jpg",
-        "alt":  "174A4665 (1)",
-        "caption":  "174A4665 (1)"
-    },
-    {
-        "src":  "assets/gallery/174A4913.jpg",
-        "thumb":  "assets/gallery/thumbs/174A4913.jpg",
-        "alt":  "174A4913",
-        "caption":  "174A4913"
-    },
-    {
-        "src":  "assets/gallery/174A6013.jpg",
-        "thumb":  "assets/gallery/thumbs/174A6013.jpg",
-        "alt":  "174A6013",
-        "caption":  "174A6013"
-    },
-    {
-        "src":  "assets/gallery/174A7055.jpg",
-        "thumb":  "assets/gallery/thumbs/174A7055.jpg",
-        "alt":  "174A7055",
-        "caption":  "174A7055"
-    },
-    {
-        "src":  "assets/gallery/174A7427.jpg",
-        "thumb":  "assets/gallery/thumbs/174A7427.jpg",
-        "alt":  "174A7427",
-        "caption":  "174A7427"
-    },
-    {
-        "src":  "assets/gallery/174A9622.jpg",
-        "thumb":  "assets/gallery/thumbs/174A9622.jpg",
-        "alt":  "174A9622",
-        "caption":  "174A9622"
-    },
-    {
-        "src":  "assets/gallery/174A9763.jpg",
-        "thumb":  "assets/gallery/thumbs/174A9763.jpg",
-        "alt":  "174A9763",
-        "caption":  "174A9763"
-    },
-    {
-        "src":  "assets/gallery/art_museum.jpeg",
-        "thumb":  "assets/gallery/thumbs/art_museum.jpg",
-        "alt":  "Art Museum",
-        "caption":  "Art Museum"
-    },
-    {
-        "src":  "assets/gallery/cq.jpeg",
-        "thumb":  "assets/gallery/thumbs/cq.jpg",
-        "alt":  "Cq",
-        "caption":  "Cq"
-    },
-    {
-        "src":  "assets/gallery/dawn.jpeg",
-        "thumb":  "assets/gallery/thumbs/dawn.jpg",
-        "alt":  "Dawn",
-        "caption":  "Dawn"
-    },
-    {
-        "src":  "assets/gallery/DJI_20250403144332_0149_D (1).jpg",
-        "thumb":  "assets/gallery/thumbs/DJI_20250403144332_0149_D (1).jpg",
-        "alt":  "Dji 20250403144332 0149 D (1)",
-        "caption":  "Dji 20250403144332 0149 D (1)"
-    },
-    {
-        "src":  "assets/gallery/DJI_20250403144806_0157_D.jpg",
-        "thumb":  "assets/gallery/thumbs/DJI_20250403144806_0157_D.jpg",
-        "alt":  "Dji 20250403144806 0157 D",
-        "caption":  "Dji 20250403144806 0157 D"
-    },
-    {
-        "src":  "assets/gallery/DJI_20251004120438_0196_D.jpg",
-        "thumb":  "assets/gallery/thumbs/DJI_20251004120438_0196_D.jpg",
-        "alt":  "Dji 20251004120438 0196 D",
-        "caption":  "Dji 20251004120438 0196 D"
-    },
-    {
-        "src":  "assets/gallery/DJI_20251229164936_0003_D (1).jpg",
-        "thumb":  "assets/gallery/thumbs/DJI_20251229164936_0003_D (1).jpg",
-        "alt":  "Dji 20251229164936 0003 D (1)",
-        "caption":  "Dji 20251229164936 0003 D (1)"
-    },
-    {
-        "src":  "assets/gallery/IMG_0923.jpg",
-        "thumb":  "assets/gallery/thumbs/IMG_0923.jpg",
-        "alt":  "Img 0923",
-        "caption":  "Img 0923"
-    },
-    {
-        "src":  "assets/gallery/IMG_1016.jpg",
-        "thumb":  "assets/gallery/thumbs/IMG_1016.jpg",
-        "alt":  "Img 1016",
-        "caption":  "Img 1016"
-    },
-    {
-        "src":  "assets/gallery/IMG_7736.jpg",
-        "thumb":  "assets/gallery/thumbs/IMG_7736.jpg",
-        "alt":  "Img 7736",
-        "caption":  "Img 7736"
-    },
-    {
-        "src":  "assets/gallery/IMG_8517.jpg",
-        "thumb":  "assets/gallery/thumbs/IMG_8517.jpg",
-        "alt":  "Img 8517",
-        "caption":  "Img 8517"
-    },
-    {
-        "src":  "assets/gallery/IMG_8706.JPG",
-        "thumb":  "assets/gallery/thumbs/IMG_8706.jpg",
-        "alt":  "Img 8706",
-        "caption":  "Img 8706"
-    },
-    {
-        "src":  "assets/gallery/IMG_8707.JPG",
-        "thumb":  "assets/gallery/thumbs/IMG_8707.jpg",
-        "alt":  "Img 8707",
-        "caption":  "Img 8707"
-    },
-    {
-        "src":  "assets/gallery/IMG_8711.JPG",
-        "thumb":  "assets/gallery/thumbs/IMG_8711.jpg",
-        "alt":  "Img 8711",
-        "caption":  "Img 8711"
-    },
-    {
-        "src":  "assets/gallery/IMG_9187.jpg",
-        "thumb":  "assets/gallery/thumbs/IMG_9187.jpg",
-        "alt":  "Img 9187",
-        "caption":  "Img 9187"
-    },
-    {
-        "src":  "assets/gallery/mixc.jpeg",
-        "thumb":  "assets/gallery/thumbs/mixc.jpg",
-        "alt":  "Mixc",
-        "caption":  "Mixc"
-    },
-    {
-        "src":  "assets/gallery/moon.png",
-        "thumb":  "assets/gallery/thumbs/moon.jpg",
-        "alt":  "Moon",
-        "caption":  "Moon"
-    },
-    {
-        "src":  "assets/gallery/ss.jpg",
-        "thumb":  "assets/gallery/thumbs/ss.jpg",
-        "alt":  "Ss",
-        "caption":  "Ss"
-    }
+[
+  {
+    "src": "assets/gallery/174A0921.jpg",
+    "thumb": "assets/gallery/optimized/174A0921.jpg.thumb.webp",
+    "alt": "174A0921",
+    "caption": "174A0921",
+    "width": 4000,
+    "height": 6000,
+    "display": "assets/gallery/optimized/174A0921.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/174A0921.jpg.small.webp",
+        "width": 533,
+        "height": 800
+      },
+      {
+        "src": "assets/gallery/optimized/174A0921.jpg.thumb.webp",
+        "width": 1067,
+        "height": 1600
+      },
+      {
+        "src": "assets/gallery/optimized/174A0921.jpg.display.webp",
+        "width": 1707,
+        "height": 2560
+      }
+    ],
+    "small": "assets/gallery/optimized/174A0921.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/174A1604.jpg",
+    "thumb": "assets/gallery/optimized/174A1604.jpg.thumb.webp",
+    "alt": "174A1604",
+    "caption": "174A1604",
+    "width": 4000,
+    "height": 6000,
+    "display": "assets/gallery/optimized/174A1604.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/174A1604.jpg.small.webp",
+        "width": 533,
+        "height": 800
+      },
+      {
+        "src": "assets/gallery/optimized/174A1604.jpg.thumb.webp",
+        "width": 1067,
+        "height": 1600
+      },
+      {
+        "src": "assets/gallery/optimized/174A1604.jpg.display.webp",
+        "width": 1707,
+        "height": 2560
+      }
+    ],
+    "small": "assets/gallery/optimized/174A1604.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/174A3427.jpg",
+    "thumb": "assets/gallery/optimized/174A3427.jpg.thumb.webp",
+    "alt": "174A3427",
+    "caption": "174A3427",
+    "width": 4000,
+    "height": 6000,
+    "display": "assets/gallery/optimized/174A3427.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/174A3427.jpg.small.webp",
+        "width": 533,
+        "height": 800
+      },
+      {
+        "src": "assets/gallery/optimized/174A3427.jpg.thumb.webp",
+        "width": 1067,
+        "height": 1600
+      },
+      {
+        "src": "assets/gallery/optimized/174A3427.jpg.display.webp",
+        "width": 1707,
+        "height": 2560
+      }
+    ],
+    "small": "assets/gallery/optimized/174A3427.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/174A4665 (1).jpg",
+    "thumb": "assets/gallery/optimized/174A4665 (1).jpg.thumb.webp",
+    "alt": "174A4665 (1)",
+    "caption": "174A4665 (1)",
+    "width": 6000,
+    "height": 4000,
+    "display": "assets/gallery/optimized/174A4665 (1).jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/174A4665 (1).jpg.small.webp",
+        "width": 800,
+        "height": 533
+      },
+      {
+        "src": "assets/gallery/optimized/174A4665 (1).jpg.thumb.webp",
+        "width": 1600,
+        "height": 1067
+      },
+      {
+        "src": "assets/gallery/optimized/174A4665 (1).jpg.display.webp",
+        "width": 2560,
+        "height": 1707
+      }
+    ],
+    "small": "assets/gallery/optimized/174A4665 (1).jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/174A4913.jpg",
+    "thumb": "assets/gallery/optimized/174A4913.jpg.thumb.webp",
+    "alt": "174A4913",
+    "caption": "174A4913",
+    "width": 6000,
+    "height": 4000,
+    "display": "assets/gallery/optimized/174A4913.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/174A4913.jpg.small.webp",
+        "width": 800,
+        "height": 533
+      },
+      {
+        "src": "assets/gallery/optimized/174A4913.jpg.thumb.webp",
+        "width": 1600,
+        "height": 1067
+      },
+      {
+        "src": "assets/gallery/optimized/174A4913.jpg.display.webp",
+        "width": 2560,
+        "height": 1707
+      }
+    ],
+    "small": "assets/gallery/optimized/174A4913.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/174A6013.jpg",
+    "thumb": "assets/gallery/optimized/174A6013.jpg.thumb.webp",
+    "alt": "174A6013",
+    "caption": "174A6013",
+    "width": 6000,
+    "height": 4000,
+    "display": "assets/gallery/optimized/174A6013.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/174A6013.jpg.small.webp",
+        "width": 800,
+        "height": 533
+      },
+      {
+        "src": "assets/gallery/optimized/174A6013.jpg.thumb.webp",
+        "width": 1600,
+        "height": 1067
+      },
+      {
+        "src": "assets/gallery/optimized/174A6013.jpg.display.webp",
+        "width": 2560,
+        "height": 1707
+      }
+    ],
+    "small": "assets/gallery/optimized/174A6013.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/174A7055.jpg",
+    "thumb": "assets/gallery/optimized/174A7055.jpg.thumb.webp",
+    "alt": "174A7055",
+    "caption": "174A7055",
+    "width": 4000,
+    "height": 3847,
+    "display": "assets/gallery/optimized/174A7055.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/174A7055.jpg.small.webp",
+        "width": 800,
+        "height": 769
+      },
+      {
+        "src": "assets/gallery/optimized/174A7055.jpg.thumb.webp",
+        "width": 1600,
+        "height": 1539
+      },
+      {
+        "src": "assets/gallery/optimized/174A7055.jpg.display.webp",
+        "width": 2560,
+        "height": 2462
+      }
+    ],
+    "small": "assets/gallery/optimized/174A7055.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/174A7427.jpg",
+    "thumb": "assets/gallery/optimized/174A7427.jpg.thumb.webp",
+    "alt": "174A7427",
+    "caption": "174A7427",
+    "width": 4000,
+    "height": 6000,
+    "display": "assets/gallery/optimized/174A7427.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/174A7427.jpg.small.webp",
+        "width": 533,
+        "height": 800
+      },
+      {
+        "src": "assets/gallery/optimized/174A7427.jpg.thumb.webp",
+        "width": 1067,
+        "height": 1600
+      },
+      {
+        "src": "assets/gallery/optimized/174A7427.jpg.display.webp",
+        "width": 1707,
+        "height": 2560
+      }
+    ],
+    "small": "assets/gallery/optimized/174A7427.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/art_museum.jpeg",
+    "thumb": "assets/gallery/optimized/art_museum.jpeg.thumb.webp",
+    "alt": "Art Museum",
+    "caption": "Art Museum",
+    "width": 4160,
+    "height": 6240,
+    "display": "assets/gallery/optimized/art_museum.jpeg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/art_museum.jpeg.small.webp",
+        "width": 533,
+        "height": 800
+      },
+      {
+        "src": "assets/gallery/optimized/art_museum.jpeg.thumb.webp",
+        "width": 1067,
+        "height": 1600
+      },
+      {
+        "src": "assets/gallery/optimized/art_museum.jpeg.display.webp",
+        "width": 1707,
+        "height": 2560
+      }
+    ],
+    "small": "assets/gallery/optimized/art_museum.jpeg.small.webp"
+  },
+  {
+    "src": "assets/gallery/cq.jpeg",
+    "thumb": "assets/gallery/optimized/cq.jpeg.thumb.webp",
+    "alt": "Cq",
+    "caption": "Cq",
+    "width": 6240,
+    "height": 4160,
+    "display": "assets/gallery/optimized/cq.jpeg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/cq.jpeg.small.webp",
+        "width": 800,
+        "height": 533
+      },
+      {
+        "src": "assets/gallery/optimized/cq.jpeg.thumb.webp",
+        "width": 1600,
+        "height": 1067
+      },
+      {
+        "src": "assets/gallery/optimized/cq.jpeg.display.webp",
+        "width": 2560,
+        "height": 1707
+      }
+    ],
+    "small": "assets/gallery/optimized/cq.jpeg.small.webp"
+  },
+  {
+    "src": "assets/gallery/dawn.jpeg",
+    "thumb": "assets/gallery/optimized/dawn.jpeg.thumb.webp",
+    "alt": "Dawn",
+    "caption": "Dawn",
+    "width": 6240,
+    "height": 4160,
+    "display": "assets/gallery/optimized/dawn.jpeg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/dawn.jpeg.small.webp",
+        "width": 800,
+        "height": 533
+      },
+      {
+        "src": "assets/gallery/optimized/dawn.jpeg.thumb.webp",
+        "width": 1600,
+        "height": 1067
+      },
+      {
+        "src": "assets/gallery/optimized/dawn.jpeg.display.webp",
+        "width": 2560,
+        "height": 1707
+      }
+    ],
+    "small": "assets/gallery/optimized/dawn.jpeg.small.webp"
+  },
+  {
+    "src": "assets/gallery/DJI_20250403144332_0149_D (1).jpg",
+    "thumb": "assets/gallery/optimized/DJI_20250403144332_0149_D (1).jpg.thumb.webp",
+    "alt": "Dji 20250403144332 0149 D (1)",
+    "caption": "Dji 20250403144332 0149 D (1)",
+    "width": 8064,
+    "height": 6048,
+    "display": "assets/gallery/optimized/DJI_20250403144332_0149_D (1).jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/DJI_20250403144332_0149_D (1).jpg.small.webp",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "src": "assets/gallery/optimized/DJI_20250403144332_0149_D (1).jpg.thumb.webp",
+        "width": 1600,
+        "height": 1200
+      },
+      {
+        "src": "assets/gallery/optimized/DJI_20250403144332_0149_D (1).jpg.display.webp",
+        "width": 2560,
+        "height": 1920
+      }
+    ],
+    "small": "assets/gallery/optimized/DJI_20250403144332_0149_D (1).jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/DJI_20250403144806_0157_D.jpg",
+    "thumb": "assets/gallery/optimized/DJI_20250403144806_0157_D.jpg.thumb.webp",
+    "alt": "Dji 20250403144806 0157 D",
+    "caption": "Dji 20250403144806 0157 D",
+    "width": 8064,
+    "height": 6048,
+    "display": "assets/gallery/optimized/DJI_20250403144806_0157_D.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/DJI_20250403144806_0157_D.jpg.small.webp",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "src": "assets/gallery/optimized/DJI_20250403144806_0157_D.jpg.thumb.webp",
+        "width": 1600,
+        "height": 1200
+      },
+      {
+        "src": "assets/gallery/optimized/DJI_20250403144806_0157_D.jpg.display.webp",
+        "width": 2560,
+        "height": 1920
+      }
+    ],
+    "small": "assets/gallery/optimized/DJI_20250403144806_0157_D.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/DJI_20251004120438_0196_D.jpg",
+    "thumb": "assets/gallery/optimized/DJI_20251004120438_0196_D.jpg.thumb.webp",
+    "alt": "Dji 20251004120438 0196 D",
+    "caption": "Dji 20251004120438 0196 D",
+    "width": 4032,
+    "height": 3024,
+    "display": "assets/gallery/optimized/DJI_20251004120438_0196_D.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/DJI_20251004120438_0196_D.jpg.small.webp",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "src": "assets/gallery/optimized/DJI_20251004120438_0196_D.jpg.thumb.webp",
+        "width": 1600,
+        "height": 1200
+      },
+      {
+        "src": "assets/gallery/optimized/DJI_20251004120438_0196_D.jpg.display.webp",
+        "width": 2560,
+        "height": 1920
+      }
+    ],
+    "small": "assets/gallery/optimized/DJI_20251004120438_0196_D.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/DJI_20251229164936_0003_D (1).jpg",
+    "thumb": "assets/gallery/optimized/DJI_20251229164936_0003_D (1).jpg.thumb.webp",
+    "alt": "Dji 20251229164936 0003 D (1)",
+    "caption": "Dji 20251229164936 0003 D (1)",
+    "width": 8064,
+    "height": 5350,
+    "display": "assets/gallery/optimized/DJI_20251229164936_0003_D (1).jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/DJI_20251229164936_0003_D (1).jpg.small.webp",
+        "width": 800,
+        "height": 531
+      },
+      {
+        "src": "assets/gallery/optimized/DJI_20251229164936_0003_D (1).jpg.thumb.webp",
+        "width": 1600,
+        "height": 1062
+      },
+      {
+        "src": "assets/gallery/optimized/DJI_20251229164936_0003_D (1).jpg.display.webp",
+        "width": 2560,
+        "height": 1698
+      }
+    ],
+    "small": "assets/gallery/optimized/DJI_20251229164936_0003_D (1).jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/IMG_0923.jpg",
+    "thumb": "assets/gallery/optimized/IMG_0923.jpg.thumb.webp",
+    "alt": "Img 0923",
+    "caption": "Img 0923",
+    "width": 6240,
+    "height": 4160,
+    "display": "assets/gallery/optimized/IMG_0923.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/IMG_0923.jpg.small.webp",
+        "width": 800,
+        "height": 533
+      },
+      {
+        "src": "assets/gallery/optimized/IMG_0923.jpg.thumb.webp",
+        "width": 1600,
+        "height": 1067
+      },
+      {
+        "src": "assets/gallery/optimized/IMG_0923.jpg.display.webp",
+        "width": 2560,
+        "height": 1707
+      }
+    ],
+    "small": "assets/gallery/optimized/IMG_0923.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/IMG_1016.jpg",
+    "thumb": "assets/gallery/optimized/IMG_1016.jpg.thumb.webp",
+    "alt": "Img 1016",
+    "caption": "Img 1016",
+    "width": 3120,
+    "height": 4160,
+    "display": "assets/gallery/optimized/IMG_1016.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/IMG_1016.jpg.small.webp",
+        "width": 600,
+        "height": 800
+      },
+      {
+        "src": "assets/gallery/optimized/IMG_1016.jpg.thumb.webp",
+        "width": 1200,
+        "height": 1600
+      },
+      {
+        "src": "assets/gallery/optimized/IMG_1016.jpg.display.webp",
+        "width": 1920,
+        "height": 2560
+      }
+    ],
+    "small": "assets/gallery/optimized/IMG_1016.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/IMG_7736.jpg",
+    "thumb": "assets/gallery/optimized/IMG_7736.jpg.thumb.webp",
+    "alt": "Img 7736",
+    "caption": "Img 7736",
+    "width": 6240,
+    "height": 4160,
+    "display": "assets/gallery/optimized/IMG_7736.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/IMG_7736.jpg.small.webp",
+        "width": 800,
+        "height": 533
+      },
+      {
+        "src": "assets/gallery/optimized/IMG_7736.jpg.thumb.webp",
+        "width": 1600,
+        "height": 1067
+      },
+      {
+        "src": "assets/gallery/optimized/IMG_7736.jpg.display.webp",
+        "width": 2560,
+        "height": 1707
+      }
+    ],
+    "small": "assets/gallery/optimized/IMG_7736.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/IMG_8517.jpg",
+    "thumb": "assets/gallery/optimized/IMG_8517.jpg.thumb.webp",
+    "alt": "Img 8517",
+    "caption": "Img 8517",
+    "width": 6240,
+    "height": 4160,
+    "display": "assets/gallery/optimized/IMG_8517.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/IMG_8517.jpg.small.webp",
+        "width": 800,
+        "height": 533
+      },
+      {
+        "src": "assets/gallery/optimized/IMG_8517.jpg.thumb.webp",
+        "width": 1600,
+        "height": 1067
+      },
+      {
+        "src": "assets/gallery/optimized/IMG_8517.jpg.display.webp",
+        "width": 2560,
+        "height": 1707
+      }
+    ],
+    "small": "assets/gallery/optimized/IMG_8517.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/IMG_8706.JPG",
+    "thumb": "assets/gallery/optimized/IMG_8706.JPG.thumb.webp",
+    "alt": "Img 8706",
+    "caption": "Img 8706",
+    "width": 6240,
+    "height": 4160,
+    "display": "assets/gallery/optimized/IMG_8706.JPG.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/IMG_8706.JPG.small.webp",
+        "width": 800,
+        "height": 533
+      },
+      {
+        "src": "assets/gallery/optimized/IMG_8706.JPG.thumb.webp",
+        "width": 1600,
+        "height": 1067
+      },
+      {
+        "src": "assets/gallery/optimized/IMG_8706.JPG.display.webp",
+        "width": 2560,
+        "height": 1707
+      }
+    ],
+    "small": "assets/gallery/optimized/IMG_8706.JPG.small.webp"
+  },
+  {
+    "src": "assets/gallery/IMG_8707.JPG",
+    "thumb": "assets/gallery/optimized/IMG_8707.JPG.thumb.webp",
+    "alt": "Img 8707",
+    "caption": "Img 8707",
+    "width": 6240,
+    "height": 4160,
+    "display": "assets/gallery/optimized/IMG_8707.JPG.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/IMG_8707.JPG.small.webp",
+        "width": 800,
+        "height": 533
+      },
+      {
+        "src": "assets/gallery/optimized/IMG_8707.JPG.thumb.webp",
+        "width": 1600,
+        "height": 1067
+      },
+      {
+        "src": "assets/gallery/optimized/IMG_8707.JPG.display.webp",
+        "width": 2560,
+        "height": 1707
+      }
+    ],
+    "small": "assets/gallery/optimized/IMG_8707.JPG.small.webp"
+  },
+  {
+    "src": "assets/gallery/IMG_8711.JPG",
+    "thumb": "assets/gallery/optimized/IMG_8711.JPG.thumb.webp",
+    "alt": "Img 8711",
+    "caption": "Img 8711",
+    "width": 6239,
+    "height": 2838,
+    "display": "assets/gallery/optimized/IMG_8711.JPG.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/IMG_8711.JPG.small.webp",
+        "width": 800,
+        "height": 364
+      },
+      {
+        "src": "assets/gallery/optimized/IMG_8711.JPG.thumb.webp",
+        "width": 1600,
+        "height": 728
+      },
+      {
+        "src": "assets/gallery/optimized/IMG_8711.JPG.display.webp",
+        "width": 2560,
+        "height": 1164
+      }
+    ],
+    "small": "assets/gallery/optimized/IMG_8711.JPG.small.webp"
+  },
+  {
+    "src": "assets/gallery/IMG_9187.jpg",
+    "thumb": "assets/gallery/optimized/IMG_9187.jpg.thumb.webp",
+    "alt": "Img 9187",
+    "caption": "Img 9187",
+    "width": 6240,
+    "height": 4160,
+    "display": "assets/gallery/optimized/IMG_9187.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/IMG_9187.jpg.small.webp",
+        "width": 800,
+        "height": 533
+      },
+      {
+        "src": "assets/gallery/optimized/IMG_9187.jpg.thumb.webp",
+        "width": 1600,
+        "height": 1067
+      },
+      {
+        "src": "assets/gallery/optimized/IMG_9187.jpg.display.webp",
+        "width": 2560,
+        "height": 1707
+      }
+    ],
+    "small": "assets/gallery/optimized/IMG_9187.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/mixc.jpeg",
+    "thumb": "assets/gallery/optimized/mixc.jpeg.thumb.webp",
+    "alt": "Mixc",
+    "caption": "Mixc",
+    "width": 4160,
+    "height": 6240,
+    "display": "assets/gallery/optimized/mixc.jpeg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/mixc.jpeg.small.webp",
+        "width": 533,
+        "height": 800
+      },
+      {
+        "src": "assets/gallery/optimized/mixc.jpeg.thumb.webp",
+        "width": 1067,
+        "height": 1600
+      },
+      {
+        "src": "assets/gallery/optimized/mixc.jpeg.display.webp",
+        "width": 1707,
+        "height": 2560
+      }
+    ],
+    "small": "assets/gallery/optimized/mixc.jpeg.small.webp"
+  },
+  {
+    "src": "assets/gallery/moon.png",
+    "thumb": "assets/gallery/optimized/moon.png.thumb.webp",
+    "alt": "Moon",
+    "caption": "Moon",
+    "width": 6000,
+    "height": 4000,
+    "display": "assets/gallery/optimized/moon.png.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/moon.png.small.webp",
+        "width": 800,
+        "height": 533
+      },
+      {
+        "src": "assets/gallery/optimized/moon.png.thumb.webp",
+        "width": 1600,
+        "height": 1067
+      },
+      {
+        "src": "assets/gallery/optimized/moon.png.display.webp",
+        "width": 2560,
+        "height": 1707
+      }
+    ],
+    "small": "assets/gallery/optimized/moon.png.small.webp"
+  },
+  {
+    "src": "assets/gallery/ss.jpg",
+    "thumb": "assets/gallery/optimized/ss.jpg.thumb.webp",
+    "alt": "Ss",
+    "caption": "Ss",
+    "width": 2831,
+    "height": 4630,
+    "display": "assets/gallery/optimized/ss.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/ss.jpg.small.webp",
+        "width": 489,
+        "height": 800
+      },
+      {
+        "src": "assets/gallery/optimized/ss.jpg.thumb.webp",
+        "width": 978,
+        "height": 1600
+      },
+      {
+        "src": "assets/gallery/optimized/ss.jpg.display.webp",
+        "width": 1565,
+        "height": 2560
+      }
+    ],
+    "small": "assets/gallery/optimized/ss.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/174A0341.jpg",
+    "alt": "174A0341",
+    "caption": "174A0341",
+    "width": 6000,
+    "height": 4000,
+    "thumb": "assets/gallery/optimized/174A0341.jpg.thumb.webp",
+    "display": "assets/gallery/optimized/174A0341.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/174A0341.jpg.small.webp",
+        "width": 800,
+        "height": 533
+      },
+      {
+        "src": "assets/gallery/optimized/174A0341.jpg.thumb.webp",
+        "width": 1600,
+        "height": 1067
+      },
+      {
+        "src": "assets/gallery/optimized/174A0341.jpg.display.webp",
+        "width": 2560,
+        "height": 1707
+      }
+    ],
+    "small": "assets/gallery/optimized/174A0341.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/174A2276.jpg",
+    "alt": "174A2276",
+    "caption": "174A2276",
+    "width": 4000,
+    "height": 6000,
+    "thumb": "assets/gallery/optimized/174A2276.jpg.thumb.webp",
+    "display": "assets/gallery/optimized/174A2276.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/174A2276.jpg.small.webp",
+        "width": 533,
+        "height": 800
+      },
+      {
+        "src": "assets/gallery/optimized/174A2276.jpg.thumb.webp",
+        "width": 1067,
+        "height": 1600
+      },
+      {
+        "src": "assets/gallery/optimized/174A2276.jpg.display.webp",
+        "width": 1707,
+        "height": 2560
+      }
+    ],
+    "small": "assets/gallery/optimized/174A2276.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/174A2622.jpg",
+    "alt": "174A2622",
+    "caption": "174A2622",
+    "width": 4000,
+    "height": 6000,
+    "thumb": "assets/gallery/optimized/174A2622.jpg.thumb.webp",
+    "display": "assets/gallery/optimized/174A2622.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/174A2622.jpg.small.webp",
+        "width": 533,
+        "height": 800
+      },
+      {
+        "src": "assets/gallery/optimized/174A2622.jpg.thumb.webp",
+        "width": 1067,
+        "height": 1600
+      },
+      {
+        "src": "assets/gallery/optimized/174A2622.jpg.display.webp",
+        "width": 1707,
+        "height": 2560
+      }
+    ],
+    "small": "assets/gallery/optimized/174A2622.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/174A2752.jpg",
+    "alt": "174A2752",
+    "caption": "174A2752",
+    "width": 4000,
+    "height": 6000,
+    "thumb": "assets/gallery/optimized/174A2752.jpg.thumb.webp",
+    "display": "assets/gallery/optimized/174A2752.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/174A2752.jpg.small.webp",
+        "width": 533,
+        "height": 800
+      },
+      {
+        "src": "assets/gallery/optimized/174A2752.jpg.thumb.webp",
+        "width": 1067,
+        "height": 1600
+      },
+      {
+        "src": "assets/gallery/optimized/174A2752.jpg.display.webp",
+        "width": 1707,
+        "height": 2560
+      }
+    ],
+    "small": "assets/gallery/optimized/174A2752.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/174A8688.jpg",
+    "alt": "174A8688",
+    "caption": "174A8688",
+    "width": 4000,
+    "height": 6000,
+    "thumb": "assets/gallery/optimized/174A8688.jpg.thumb.webp",
+    "display": "assets/gallery/optimized/174A8688.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/174A8688.jpg.small.webp",
+        "width": 533,
+        "height": 800
+      },
+      {
+        "src": "assets/gallery/optimized/174A8688.jpg.thumb.webp",
+        "width": 1067,
+        "height": 1600
+      },
+      {
+        "src": "assets/gallery/optimized/174A8688.jpg.display.webp",
+        "width": 1707,
+        "height": 2560
+      }
+    ],
+    "small": "assets/gallery/optimized/174A8688.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/174A9364.jpg",
+    "alt": "174A9364",
+    "caption": "174A9364",
+    "width": 4000,
+    "height": 6000,
+    "thumb": "assets/gallery/optimized/174A9364.jpg.thumb.webp",
+    "display": "assets/gallery/optimized/174A9364.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/174A9364.jpg.small.webp",
+        "width": 533,
+        "height": 800
+      },
+      {
+        "src": "assets/gallery/optimized/174A9364.jpg.thumb.webp",
+        "width": 1067,
+        "height": 1600
+      },
+      {
+        "src": "assets/gallery/optimized/174A9364.jpg.display.webp",
+        "width": 1707,
+        "height": 2560
+      }
+    ],
+    "small": "assets/gallery/optimized/174A9364.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/174A9763.jpg",
+    "alt": "174A9763",
+    "caption": "174A9763",
+    "width": 4000,
+    "height": 6000,
+    "thumb": "assets/gallery/optimized/174A9763.jpg.thumb.webp",
+    "display": "assets/gallery/optimized/174A9763.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/174A9763.jpg.small.webp",
+        "width": 533,
+        "height": 800
+      },
+      {
+        "src": "assets/gallery/optimized/174A9763.jpg.thumb.webp",
+        "width": 1067,
+        "height": 1600
+      },
+      {
+        "src": "assets/gallery/optimized/174A9763.jpg.display.webp",
+        "width": 1707,
+        "height": 2560
+      }
+    ],
+    "small": "assets/gallery/optimized/174A9763.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/DJI_20260227174302_0454_D.jpg",
+    "alt": "DJI 20260227174302 0454 D",
+    "caption": "DJI 20260227174302 0454 D",
+    "width": 4032,
+    "height": 3024,
+    "thumb": "assets/gallery/optimized/DJI_20260227174302_0454_D.jpg.thumb.webp",
+    "display": "assets/gallery/optimized/DJI_20260227174302_0454_D.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/DJI_20260227174302_0454_D.jpg.small.webp",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "src": "assets/gallery/optimized/DJI_20260227174302_0454_D.jpg.thumb.webp",
+        "width": 1600,
+        "height": 1200
+      },
+      {
+        "src": "assets/gallery/optimized/DJI_20260227174302_0454_D.jpg.display.webp",
+        "width": 2560,
+        "height": 1920
+      }
+    ],
+    "small": "assets/gallery/optimized/DJI_20260227174302_0454_D.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/DJI_20260603205753_0493_D.jpg",
+    "alt": "DJI 20260603205753 0493 D",
+    "caption": "DJI 20260603205753 0493 D",
+    "width": 4032,
+    "height": 3024,
+    "thumb": "assets/gallery/optimized/DJI_20260603205753_0493_D.jpg.thumb.webp",
+    "display": "assets/gallery/optimized/DJI_20260603205753_0493_D.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/DJI_20260603205753_0493_D.jpg.small.webp",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "src": "assets/gallery/optimized/DJI_20260603205753_0493_D.jpg.thumb.webp",
+        "width": 1600,
+        "height": 1200
+      },
+      {
+        "src": "assets/gallery/optimized/DJI_20260603205753_0493_D.jpg.display.webp",
+        "width": 2560,
+        "height": 1920
+      }
+    ],
+    "small": "assets/gallery/optimized/DJI_20260603205753_0493_D.jpg.small.webp"
+  },
+  {
+    "src": "assets/gallery/DJI_20260718161742_0022_D.jpg",
+    "alt": "DJI 20260718161742 0022 D",
+    "caption": "DJI 20260718161742 0022 D",
+    "width": 4032,
+    "height": 3024,
+    "thumb": "assets/gallery/optimized/DJI_20260718161742_0022_D.jpg.thumb.webp",
+    "display": "assets/gallery/optimized/DJI_20260718161742_0022_D.jpg.display.webp",
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/DJI_20260718161742_0022_D.jpg.small.webp",
+        "width": 800,
+        "height": 600
+      },
+      {
+        "src": "assets/gallery/optimized/DJI_20260718161742_0022_D.jpg.thumb.webp",
+        "width": 1600,
+        "height": 1200
+      },
+      {
+        "src": "assets/gallery/optimized/DJI_20260718161742_0022_D.jpg.display.webp",
+        "width": 2560,
+        "height": 1920
+      }
+    ],
+    "small": "assets/gallery/optimized/DJI_20260718161742_0022_D.jpg.small.webp"
+  }
 ]

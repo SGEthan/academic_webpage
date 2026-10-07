@@ -63,6 +63,26 @@
   function refreshBodyScrollLock() {
     const hasOpenDialog = document.querySelector(".lightbox.is-open, .bibtex-modal.is-open");
     document.body.classList.toggle("no-scroll", Boolean(hasOpenDialog));
+    document.querySelectorAll("body > header, body > main, body > footer").forEach((element) => {
+      element.inert = Boolean(hasOpenDialog);
+    });
+    document.dispatchEvent(new CustomEvent("site:dialogchange", { detail: { open: Boolean(hasOpenDialog) } }));
+  }
+
+  function trapDialogFocus(event, dialog) {
+    if (event.key !== "Tab") return;
+    const controls = Array.from(dialog.querySelectorAll('button:not(:disabled), a[href], [tabindex="0"]'))
+      .filter((element) => element.getClientRects().length > 0);
+    const first = controls[0];
+    const last = controls[controls.length - 1];
+    if (!first) return;
+    if (event.shiftKey && (document.activeElement === first || !dialog.contains(document.activeElement))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (document.activeElement === last || !dialog.contains(document.activeElement))) {
+      event.preventDefault();
+      first.focus();
+    }
   }
 
   function initSmoothAnchorScroll() {
@@ -127,6 +147,53 @@
     }
   }
 
+  function galleryImageSrcset(item, maxEdge = Infinity) {
+    const byWidth = new Map();
+    (item.variants || []).forEach((variant) => {
+      if (!variant.src || !(variant.width > 0) || !(variant.height > 0)) return;
+      if (Math.max(variant.width, variant.height) > maxEdge) return;
+      const url = encodeURI(variant.src).replace(/,/g, "%2C").replace(/#/g, "%23");
+      byWidth.set(variant.width, `${url} ${variant.width}w`);
+    });
+    return Array.from(byWidth).sort(([a], [b]) => a - b).map(([, source]) => source).join(", ");
+  }
+
+  function galleryLightboxSizes(item) {
+    const ratio = item.width > 0 && item.height > 0 ? item.width / item.height : 1;
+    const heightLimit = `calc(82vh * ${ratio.toFixed(5)})`;
+    return `(max-width: 560px) min(calc(96vw - 1.6rem), ${heightLimit}), min(calc(1240px - 4.4rem), calc(96vw - 4.4rem), ${heightLimit})`;
+  }
+
+  function configureGalleryImage(img, item, sizes) {
+    if (item.width > 0 && item.height > 0) {
+      img.width = item.width;
+      img.height = item.height;
+    }
+    const srcset = galleryImageSrcset(item, 1600);
+    if (srcset) {
+      img.srcset = srcset;
+      img.sizes = sizes;
+    }
+    // Set lazy loading, srcset, and sizes before src to avoid an unnecessary large request.
+    img.src = srcset ? item.small || item.thumb || item.src : item.thumb || item.src;
+  }
+
+  function configureGalleryTrigger(button, item) {
+    button.setAttribute("data-full-src", item.display || item.src);
+    const srcset = galleryImageSrcset(item);
+    if (srcset) button.setAttribute("data-full-srcset", srcset);
+    if (item.caption) button.setAttribute("data-caption", item.caption);
+  }
+
+  function galleryPageImageSizes(span = 2) {
+    const breakpoints = [[560, 1], [760, 2], [980, 3], [1120, 4], [1280, 5], [1480, 6]];
+    const hints = breakpoints.map(([width, columns]) =>
+      `(max-width: ${width}px) calc(94vw * ${(Math.min(span, columns) / columns).toFixed(5)})`
+    );
+    hints.push(`calc(min(1700px, 94vw) * ${(Math.min(span, 7) / 7).toFixed(5)})`);
+    return hints.join(", ");
+  }
+
   function initGalleryLightbox() {
     const lightbox = document.getElementById("lightbox");
     const backdrop = lightbox?.querySelector(".lightbox-backdrop");
@@ -142,6 +209,7 @@
 
     let currentIndex = 0;
     let lastFocusedEl = null;
+    let adjacentPreloads = [];
 
     function collectGalleryItems() {
       const triggers = Array.from(document.querySelectorAll(".gallery-trigger"));
@@ -155,6 +223,9 @@
         trigger.setAttribute("data-gallery-index", String(index));
         return {
           src: fullSrc,
+          srcset: trigger.getAttribute("data-full-srcset") || "",
+          width: Number(img?.getAttribute("width") || img?.naturalWidth || 0),
+          height: Number(img?.getAttribute("height") || img?.naturalHeight || 0),
           alt: img?.getAttribute("alt") || "",
           caption,
         };
@@ -166,9 +237,25 @@
     function renderLightbox(index) {
       const item = galleryItems[index];
       if (!item) return;
+      imageEl.srcset = item.srcset;
+      imageEl.sizes = item.srcset ? galleryLightboxSizes(item) : "";
       imageEl.src = item.src;
       imageEl.alt = item.alt;
       captionEl.textContent = item.caption;
+      // Warm only neighboring images, at the same responsive size used in the viewer.
+      const connection = window.navigator?.connection;
+      if (typeof window.Image !== "function" || connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType || "")) return;
+      const neighbors = new Set([(index + 1) % galleryItems.length, (index - 1 + galleryItems.length) % galleryItems.length]);
+      neighbors.delete(index);
+      adjacentPreloads = Array.from(neighbors, (neighbor) => {
+        const next = galleryItems[neighbor];
+        const preload = new window.Image();
+        preload.decoding = "async";
+        preload.srcset = next.srcset;
+        preload.sizes = next.srcset ? galleryLightboxSizes(next) : "";
+        preload.src = next.src;
+        return preload;
+      });
     }
 
     function openLightbox(index) {
@@ -182,6 +269,7 @@
     }
 
     function closeLightbox() {
+      adjacentPreloads = [];
       lightbox.classList.remove("is-open");
       lightbox.setAttribute("aria-hidden", "true");
       refreshBodyScrollLock();
@@ -203,7 +291,10 @@
     document.addEventListener("click", (event) => {
       const trigger = event.target.closest(".gallery-trigger");
       if (!trigger) return;
+      if (event.defaultPrevented) return;
       if (document.body.classList.contains("is-gallery-arranging")) return;
+      const carouselCard = trigger.closest(".gallery-carousel .gallery-card");
+      if (carouselCard && !carouselCard.classList.contains("is-active")) return;
       const index = Number.parseInt(trigger.getAttribute("data-gallery-index") || "-1", 10);
       if (index < 0) return;
       openLightbox(index);
@@ -216,6 +307,7 @@
 
     document.addEventListener("keydown", (event) => {
       if (!lightbox.classList.contains("is-open")) return;
+      trapDialogFocus(event, lightbox);
       if (event.key === "Escape") closeLightbox();
       if (event.key === "ArrowLeft") showPrevious();
       if (event.key === "ArrowRight") showNext();
@@ -231,11 +323,11 @@
     if (!container) return;
 
     try {
-      const items = await loadGalleryManifest();
+      // Shuffle once per page load; navigation and autoplay keep this order.
+      const items = shuffleArray(await loadGalleryManifest());
 
       container.innerHTML = "";
-      const shuffledItems = shuffleArray(items.slice());
-      shuffledItems.forEach((item) => {
+      items.forEach((item) => {
         const figure = document.createElement("figure");
         figure.className = "gallery-card";
 
@@ -243,15 +335,25 @@
         button.className = "gallery-trigger";
         button.type = "button";
         button.setAttribute("aria-label", `Open image: ${item.alt || item.caption || "Gallery image"}`);
-        button.setAttribute("data-full-src", item.src);
-        if (item.caption) button.setAttribute("data-caption", item.caption);
+        configureGalleryTrigger(button, item);
 
         const img = document.createElement("img");
-        // Full gallery emphasizes original quality and native aspect ratio.
-        img.src = item.src;
+        if (item.width > 0 && item.height > 0) {
+          figure.style.aspectRatio = `${item.width} / ${item.height}`;
+        }
+        const syncPreviewRatio = () => {
+          if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+            figure.style.aspectRatio = `${img.naturalWidth} / ${img.naturalHeight}`;
+          }
+        };
+        if (!item.width || !item.height) img.addEventListener("load", syncPreviewRatio, { once: true });
         img.alt = item.alt || item.caption || "Gallery image";
-        img.loading = "lazy";
+        img.loading = container.children.length < 3 ? "eager" : "lazy";
         img.decoding = "async";
+        const ratio = item.width > 0 && item.height > 0 ? item.width / item.height : 1.6;
+        const carouselSizes = `(max-width: 560px) min(88vw, calc(min(58vw, 300px) * ${ratio.toFixed(5)})), (max-width: 900px) min(90vw, calc(min(48vw, 440px) * ${ratio.toFixed(5)})), min(1015px, 86.48vw, calc(clamp(300px, 43vw, 480px) * ${ratio.toFixed(5)}))`;
+        configureGalleryImage(img, item, carouselSizes);
+        if ((!item.width || !item.height) && img.complete) syncPreviewRatio();
         button.appendChild(img);
 
         figure.appendChild(button);
@@ -290,7 +392,8 @@
 
     try {
       const rawItems = await loadGalleryManifest();
-      const items = shuffleArray(rawItems.slice());
+      // Layout, image loading, and resizing reuse this one shuffled DOM order.
+      const items = shuffleArray(rawItems);
       container.innerHTML = "";
       const validLayouts = new Set(["wide", "tall", "big"]);
 
@@ -298,21 +401,19 @@
         const figure = document.createElement("figure");
         figure.className = "gallery-card gallery-page-card";
         figure.dataset.itemId = item.src;
-        figure.dataset.rand = String(Math.random());
 
         const button = document.createElement("button");
         button.className = "gallery-trigger";
         button.type = "button";
         button.setAttribute("aria-label", `Open image: ${item.alt || item.caption || "Gallery image"}`);
-        button.setAttribute("data-full-src", item.src);
-        if (item.caption) button.setAttribute("data-caption", item.caption);
+        configureGalleryTrigger(button, item);
 
         const img = document.createElement("img");
         img.alt = item.alt || item.caption || "Gallery image";
         img.loading = "lazy";
         img.decoding = "async";
-        const onImageReady = () => {
-          const ratio = (img.naturalWidth || 1) / (img.naturalHeight || 1);
+        const setImageLayout = () => {
+          const ratio = (item.width || img.naturalWidth || 1) / (item.height || img.naturalHeight || 1);
           figure.dataset.ratio = String(ratio);
           let layout = typeof item.layout === "string" ? item.layout.trim().toLowerCase() : "";
           if (!validLayouts.has(layout)) layout = "";
@@ -325,10 +426,14 @@
           const defaultSpan = normalizeSpan(layout ? spanFromLayout : autoSpan, 2);
           figure.dataset.defaultSpan = spanToString(defaultSpan);
           figure.dataset.span = spanToString(defaultSpan);
-          layoutGalleryGrid(container, { optimize: true, randomize: true });
+        };
+        if (item.width > 0 && item.height > 0) setImageLayout();
+        const onImageReady = () => {
+          if (!item.width || !item.height) setImageLayout();
+          layoutGalleryGrid(container, { optimize: true });
         };
         img.addEventListener("load", onImageReady, { once: true });
-        img.src = item.src;
+        configureGalleryImage(img, item, galleryPageImageSizes(Number(figure.dataset.defaultSpan) || 2));
         if (img.complete && img.naturalWidth > 0) {
           // Cached images can skip async load dispatch in some browsers.
           onImageReady();
@@ -339,8 +444,8 @@
         container.appendChild(figure);
       });
 
-      window.requestAnimationFrame(() => layoutGalleryGrid(container, { optimize: true, randomize: true }));
-      window.setTimeout(() => layoutGalleryGrid(container, { optimize: true, randomize: true }), 80);
+      window.requestAnimationFrame(() => layoutGalleryGrid(container, { optimize: true }));
+      window.setTimeout(() => layoutGalleryGrid(container, { optimize: true }), 80);
       if (!window.__galleryPageResizeBound) {
         window.__galleryPageResizeBound = true;
         let resizeTimer = null;
@@ -378,7 +483,7 @@
 
     const readyCards = cards.filter((card) => {
       const img = card.querySelector("img");
-      const isReady = Boolean(img && img.complete && img.naturalWidth > 0);
+      const isReady = Boolean(card.dataset.ratio || (img && img.complete && img.naturalWidth > 0));
       card.style.visibility = isReady ? "visible" : "hidden";
       return isReady;
     });
@@ -807,153 +912,271 @@
     const track = document.getElementById("auto-gallery");
     const prevBtn = document.getElementById("gallery-prev");
     const nextBtn = document.getElementById("gallery-next");
-    if (!track || !prevBtn || !nextBtn) return null;
+    const viewport = track?.closest(".gallery-viewport");
+    const carouselRoot = track?.closest(".gallery-carousel");
+    const autoplayBtn = document.getElementById("gallery-autoplay");
+    const autoplayIcon = document.getElementById("gallery-autoplay-icon");
+    const positionEl = document.getElementById("gallery-position");
+    const currentEl = document.getElementById("gallery-current");
+    const totalEl = document.getElementById("gallery-total");
+    const progressEl = document.getElementById("gallery-progress-fill");
+    if (!track || !viewport || !carouselRoot || !prevBtn || !nextBtn) return null;
 
-    let currentIndex = 0;
-    let autoTimer = null;
-    let lastWheelAt = 0;
-    let wheelAccumulator = 0;
+    const slides = Array.from(track.querySelectorAll(".gallery-card:not(.gallery-loading)"));
+    const total = slides.length;
+    const formatIndex = (value) => String(value).padStart(2, "0");
 
-    function getItems() {
-      return Array.from(track.querySelectorAll(".gallery-card"));
+    function setUi(selectedIndex) {
+      const safeIndex = total ? ((selectedIndex % total) + total) % total : 0;
+      slides.forEach((slide, index) => {
+        const isActive = index === safeIndex;
+        slide.classList.toggle("is-active", isActive);
+        slide.setAttribute("role", "group");
+        slide.setAttribute("aria-roledescription", "slide");
+        slide.setAttribute("aria-label", `${index + 1} of ${total}`);
+        if (isActive) slide.setAttribute("aria-current", "true");
+        else slide.removeAttribute("aria-current");
+        const trigger = slide.querySelector(".gallery-trigger");
+        if (trigger) trigger.tabIndex = isActive ? 0 : -1;
+        // Warm the selected image and its neighbors before the next one-second step.
+        if ([safeIndex, (safeIndex + 1) % total, (safeIndex - 1 + total) % total].includes(index)) {
+          const img = slide.querySelector("img");
+          if (img) img.loading = "eager";
+        }
+      });
+      if (currentEl) currentEl.textContent = formatIndex(total ? safeIndex + 1 : 0);
+      if (totalEl) totalEl.textContent = formatIndex(total);
+      if (progressEl) progressEl.style.transform = `scaleX(${total ? (safeIndex + 1) / total : 0})`;
+      prevBtn.disabled = total <= 1;
+      nextBtn.disabled = total <= 1;
     }
 
-    function normalizeOffset(index, active, total) {
-      let offset = index - active;
-      if (offset > total / 2) offset -= total;
-      if (offset < -total / 2) offset += total;
-      return offset;
-    }
+    function setupAutoplay(goNext) {
+      if (!autoplayBtn || total <= 1) {
+        if (autoplayBtn) autoplayBtn.disabled = true;
+        return;
+      }
 
-    function transformForOffset(offset) {
-      if (offset === 0) return "translate(-50%, -50%) translateX(0%) translateZ(200px) scale(0.94)";
-      if (offset === -1) return "translate(-50%, -50%) translateX(-49%) translateZ(-110px) scale(0.79) rotateY(32deg)";
-      if (offset === 1) return "translate(-50%, -50%) translateX(49%) translateZ(-110px) scale(0.79) rotateY(-32deg)";
-      if (offset === -2) return "translate(-50%, -50%) translateX(-78%) translateZ(-250px) scale(0.64) rotateY(44deg)";
-      if (offset === 2) return "translate(-50%, -50%) translateX(78%) translateZ(-250px) scale(0.64) rotateY(-44deg)";
-      return "translate(-50%, -50%) translateX(0%) translateZ(-230px) scale(0.5)";
-    }
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      let userPaused = reducedMotion.matches;
+      let focusPaused = false;
+      let pauseButtonState = null;
+      let dialogPaused = Boolean(document.querySelector(".lightbox.is-open, .bibtex-modal.is-open"));
+      let hoverPaused = false;
+      let pointerPaused = false;
+      let pageVisible = !document.hidden;
+      let carouselVisible = !("IntersectionObserver" in window);
+      let timer = null;
 
-    function applyTransform() {
-      const items = getItems();
-      const total = items.length;
-      if (!total) return;
+      function updateButton() {
+        const paused = userPaused || focusPaused;
+        if (autoplayIcon) autoplayIcon.textContent = paused ? "▶" : "Ⅱ";
+        const label = paused ? "Start automatic slideshow" : "Pause automatic slideshow";
+        autoplayBtn.setAttribute("aria-label", label);
+        autoplayBtn.title = label;
+        if (positionEl) positionEl.setAttribute("aria-live", paused ? "polite" : "off");
+      }
 
-      if (currentIndex >= total) currentIndex = 0;
-      if (currentIndex < 0) currentIndex = total - 1;
+      function stop() {
+        if (!timer) return;
+        window.clearInterval(timer);
+        timer = null;
+      }
 
-      items.forEach((item, i) => {
-        item.classList.remove("is-active", "is-side");
-        const offset = normalizeOffset(i, currentIndex, total);
-        const absOffset = Math.abs(offset);
+      function reconcile() {
+        stop();
+        if (userPaused || focusPaused || dialogPaused || hoverPaused || pointerPaused || !pageVisible || !carouselVisible) return;
+        timer = window.setInterval(goNext, 1000);
+      }
 
-        item.style.transformOrigin =
-          offset < 0 ? "right center" : offset > 0 ? "left center" : "center center";
-        item.style.transform = transformForOffset(offset);
-        item.style.zIndex = absOffset === 0 ? "300" : absOffset === 1 ? "200" : absOffset === 2 ? "120" : "80";
-        item.style.opacity = absOffset > 2 ? "0" : absOffset === 2 ? "0.24" : absOffset === 1 ? "0.64" : "1";
-        item.style.pointerEvents = absOffset <= 1 ? "auto" : "none";
-
-        if (absOffset === 0) item.classList.add("is-active");
-        if (absOffset === 1) item.classList.add("is-side");
+      autoplayBtn.addEventListener("pointerdown", () => {
+        pauseButtonState = userPaused || focusPaused;
+      });
+      autoplayBtn.addEventListener("pointercancel", () => { pauseButtonState = null; });
+      autoplayBtn.addEventListener("click", () => {
+        userPaused = !(pauseButtonState ?? (userPaused || focusPaused));
+        pauseButtonState = null;
+        focusPaused = false;
+        updateButton();
+        reconcile();
       });
 
-      const disabled = total <= 1;
-      prevBtn.disabled = disabled;
-      nextBtn.disabled = disabled;
-    }
+      carouselRoot.addEventListener("focusin", () => {
+        focusPaused = true;
+        updateButton();
+        reconcile();
+      });
+      document.addEventListener("site:dialogchange", (event) => {
+        dialogPaused = event.detail.open;
+        reconcile();
+      });
 
-    function goNext() {
-      const total = getItems().length;
-      if (total <= 1) return;
-      currentIndex = (currentIndex + 1) % total;
-      applyTransform();
-    }
+      carouselRoot.addEventListener("mouseenter", () => {
+        hoverPaused = true;
+        reconcile();
+      });
+      carouselRoot.addEventListener("mouseleave", () => {
+        hoverPaused = false;
+        reconcile();
+      });
+      viewport.addEventListener("pointerdown", () => {
+        pointerPaused = true;
+        reconcile();
+      });
+      const resumeAfterPointer = () => {
+        pointerPaused = false;
+        window.setTimeout(reconcile, 180);
+      };
+      window.addEventListener("pointerup", resumeAfterPointer);
+      window.addEventListener("pointercancel", resumeAfterPointer);
 
-    function goPrev() {
-      const total = getItems().length;
-      if (total <= 1) return;
-      currentIndex = (currentIndex - 1 + total) % total;
-      applyTransform();
-    }
+      document.addEventListener("visibilitychange", () => {
+        pageVisible = !document.hidden;
+        reconcile();
+      });
+      reducedMotion.addEventListener("change", (event) => {
+        if (event.matches) userPaused = true;
+        updateButton();
+        reconcile();
+      });
 
-    function startAuto() {
-      stopAuto();
-      autoTimer = window.setInterval(goNext, 4200);
-    }
-
-    function stopAuto() {
-      if (autoTimer) {
-        window.clearInterval(autoTimer);
-        autoTimer = null;
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            carouselVisible = Boolean(entry?.isIntersecting);
+            reconcile();
+          },
+          { threshold: 0.2 }
+        );
+        observer.observe(carouselRoot);
       }
+
+      updateButton();
+      reconcile();
     }
 
-    function refresh() {
-      applyTransform();
-      startAuto();
+    if (!total) {
+      setUi(0);
+      return null;
     }
 
-    prevBtn.addEventListener("click", () => {
-      goPrev();
-      startAuto();
+    if (typeof window.EmblaCarousel !== "function") {
+      let fallbackIndex = 0;
+      const syncFallbackEdges = () => {
+        track.style.setProperty("--gallery-start-space", `${Math.max(0, (viewport.clientWidth - slides[0].clientWidth) / 2)}px`);
+        track.style.setProperty("--gallery-end-space", `${Math.max(0, (viewport.clientWidth - slides[total - 1].clientWidth) / 2)}px`);
+      };
+      const showFallback = (nextIndex) => {
+        const previousIndex = fallbackIndex;
+        fallbackIndex = ((nextIndex % total) + total) % total;
+        const slide = slides[fallbackIndex];
+        if (slide) viewport.scrollTo({
+          left: viewport.scrollLeft + slide.getBoundingClientRect().left - viewport.getBoundingClientRect().left - (viewport.clientWidth - slide.clientWidth) / 2,
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches || Math.abs(fallbackIndex - previousIndex) > 1 ? "auto" : "smooth",
+        });
+        setUi(fallbackIndex);
+      };
+      let scrollFrame = null;
+      const syncFallbackScroll = () => {
+        scrollFrame = null;
+        const center = viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
+        let nearest = fallbackIndex;
+        let distance = Infinity;
+        slides.forEach((slide, index) => {
+          const rect = slide.getBoundingClientRect();
+          const delta = Math.abs(rect.left + rect.width / 2 - center);
+          if (delta < distance) { nearest = index; distance = delta; }
+        });
+        if (nearest !== fallbackIndex) {
+          fallbackIndex = nearest;
+          setUi(fallbackIndex);
+        }
+      };
+      viewport.addEventListener("scroll", () => {
+        if (scrollFrame !== null) return;
+        scrollFrame = window.requestAnimationFrame(syncFallbackScroll);
+      }, { passive: true });
+      prevBtn.addEventListener("click", () => showFallback(fallbackIndex - 1));
+      nextBtn.addEventListener("click", () => showFallback(fallbackIndex + 1));
+      track.addEventListener("click", (event) => {
+        const slide = event.target.closest(".gallery-card");
+        if (!slide || slide.classList.contains("is-active")) return;
+        event.preventDefault();
+        const index = slides.indexOf(slide);
+        if (index >= 0) showFallback(index);
+      });
+      viewport.addEventListener("keydown", (event) => {
+        if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+        event.preventDefault();
+        showFallback(fallbackIndex + (event.key === "ArrowRight" ? 1 : -1));
+      });
+      window.addEventListener("resize", () => {
+        syncFallbackEdges();
+        showFallback(fallbackIndex);
+      });
+      syncFallbackEdges();
+      showFallback(0);
+      setupAutoplay(() => showFallback(fallbackIndex + 1));
+      return { refresh: () => { syncFallbackEdges(); showFallback(fallbackIndex); } };
+    }
+
+    carouselRoot.classList.add("is-enhanced");
+    const embla = window.EmblaCarousel(viewport, {
+      align: "center",
+      loop: total > 2,
+      skipSnaps: false,
+      duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 28,
     });
-    nextBtn.addEventListener("click", () => {
-      goNext();
-      startAuto();
-    });
+
+    const sync = () => setUi(embla.selectedScrollSnap());
+    prevBtn.addEventListener("click", () => embla.scrollPrev());
+    nextBtn.addEventListener("click", () => embla.scrollNext());
 
     track.addEventListener("click", (event) => {
-      const card = event.target.closest(".gallery-card");
-      if (!card) return;
-      const items = getItems();
-      const idx = items.indexOf(card);
-      if (idx < 0 || idx === currentIndex) return;
-      currentIndex = idx;
-      applyTransform();
-      startAuto();
+      const slide = event.target.closest(".gallery-card");
+      if (!slide || slide.classList.contains("is-active")) return;
+      event.preventDefault();
+      const index = slides.indexOf(slide);
+      if (index >= 0) embla.scrollTo(index);
     });
 
-    const carouselRoot = track.closest(".gallery-carousel");
-    const viewport = track.closest(".gallery-viewport");
-    carouselRoot?.addEventListener("mouseenter", stopAuto);
-    carouselRoot?.addEventListener("mouseleave", startAuto);
+    viewport.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        embla.scrollPrev();
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        embla.scrollNext();
+      }
+    });
 
-    viewport?.addEventListener(
+    let lastHorizontalWheelAt = 0;
+    viewport.addEventListener(
       "wheel",
       (event) => {
-        const items = getItems();
-        if (items.length <= 1) return;
-
-        const primaryDelta =
-          Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
-        if (Math.abs(primaryDelta) < 4) return;
-
+        if (Math.abs(event.deltaX) <= Math.abs(event.deltaY) || Math.abs(event.deltaX) < 18) return;
         event.preventDefault();
-
         const now = Date.now();
-        if (now - lastWheelAt > 280) {
-          wheelAccumulator = primaryDelta;
-        } else {
-          wheelAccumulator += primaryDelta;
-        }
-
-        if (Math.abs(wheelAccumulator) < 48) return;
-
-        if (wheelAccumulator > 0) goNext();
-        else goPrev();
-
-        startAuto();
-        lastWheelAt = now;
-        wheelAccumulator = 0;
+        if (now - lastHorizontalWheelAt < 420) return;
+        lastHorizontalWheelAt = now;
+        if (event.deltaX > 0) embla.scrollNext();
+        else embla.scrollPrev();
       },
       { passive: false }
     );
 
-    window.addEventListener("resize", refresh);
-    refresh();
+    embla.on("select", sync);
+    embla.on("reInit", sync);
+    sync();
+    setupAutoplay(() => embla.scrollNext());
 
-    return { refresh };
+    return {
+      refresh: () => {
+        embla.reInit();
+        sync();
+      },
+    };
   }
 
   function parseBibtexEntries(rawText) {
@@ -1010,7 +1233,15 @@
   }
 
   const EXTRA_LINK_FIELDS = ["poster", "talk", "dataset", "code", "slides", "video", "website", "project"];
-  const NON_CITE_FIELDS = new Set(["tag", "selected", "topic", ...EXTRA_LINK_FIELDS, "url"]);
+  const NON_CITE_FIELDS = new Set([
+    "tag",
+    "selected",
+    "topic",
+    "cat",
+    "equal_contribution",
+    ...EXTRA_LINK_FIELDS,
+    "url",
+  ]);
 
   function splitTags(rawTag) {
     if (!rawTag) return [];
@@ -1088,9 +1319,9 @@
     return authorName.trim().toLowerCase() === "yichuan deng";
   }
 
-  function renderPublicationItem(entry) {
+  function renderPublicationItem(entry, { compact = false } = {}) {
     const article = document.createElement("article");
-    article.className = "pub-item";
+    article.className = compact ? "pub-item pub-item--compact" : "pub-item";
 
     const tagsRow = document.createElement("div");
     tagsRow.className = "pub-tags";
@@ -1107,22 +1338,64 @@
     title.textContent = entry.title;
 
     const authors = document.createElement("p");
+    authors.className = "pub-authors";
     const authorNames = splitAndNormalizeAuthors(entry.authors);
     const hasEtAl = authorNames.some((a) => a.toLowerCase() === "et al.");
     const cleanNames = authorNames.filter((a) => a.toLowerCase() !== "et al.");
-    cleanNames.forEach((name, idx) => {
-      if (idx > 0) authors.append(", ");
-      if (isMyName(name)) {
-        const strong = document.createElement("strong");
-        strong.textContent = name;
-        authors.appendChild(strong);
-      } else {
-        authors.append(name);
-      }
-    });
-    if (hasEtAl) {
-      if (cleanNames.length > 0) authors.append(", ");
-      authors.append("et al.");
+    const equalContributionCount = Math.min(
+      cleanNames.length,
+      Math.max(0, Number.parseInt(entry.fields.equal_contribution || "0", 10) || 0)
+    );
+    const compactIndices = cleanNames.map((name, index) => index)
+      .filter((index) => index < Math.max(3, equalContributionCount) || isMyName(cleanNames[index]));
+    const canCollapse = cleanNames.length > 8 && compactIndices.length < cleanNames.length;
+    const renderAuthors = (expanded) => {
+      authors.replaceChildren();
+      const indices = canCollapse && !expanded ? compactIndices : cleanNames.map((name, index) => index);
+      let previous = -1;
+      indices.forEach((index, position) => {
+        if (position > 0) authors.append(index > previous + 1 ? ", …, " : ", ");
+        const name = cleanNames[index];
+        if (isMyName(name)) {
+          const strong = document.createElement("strong");
+          strong.textContent = name;
+          authors.appendChild(strong);
+        } else authors.append(name);
+        if (index < equalContributionCount) {
+          const marker = document.createElement("sup");
+          marker.className = "equal-contribution-marker";
+          marker.textContent = "*";
+          marker.title = "Equal contribution";
+          authors.appendChild(marker);
+        }
+        previous = index;
+      });
+      if (previous < cleanNames.length - 1) authors.append(", …");
+      if (hasEtAl) authors.append(cleanNames.length ? ", et al." : "et al.");
+    };
+    renderAuthors(false);
+    let authorsToggle = null;
+    if (canCollapse) {
+      authors.id = `authors-${entry.key}`;
+      authorsToggle = document.createElement("button");
+      authorsToggle.type = "button";
+      authorsToggle.className = "authors-toggle";
+      authorsToggle.textContent = `Show all ${cleanNames.length} authors`;
+      authorsToggle.setAttribute("aria-expanded", "false");
+      authorsToggle.setAttribute("aria-controls", authors.id);
+      authorsToggle.addEventListener("click", () => {
+        const expanded = authorsToggle.getAttribute("aria-expanded") !== "true";
+        authorsToggle.setAttribute("aria-expanded", String(expanded));
+        authorsToggle.textContent = expanded ? "Show fewer authors" : `Show all ${cleanNames.length} authors`;
+        renderAuthors(expanded);
+      });
+    }
+
+    let contributionNote = null;
+    if (equalContributionCount > 0) {
+      contributionNote = document.createElement("p");
+      contributionNote.className = "equal-contribution-note";
+      contributionNote.textContent = "* Equal contribution";
     }
 
     const links = document.createElement("div");
@@ -1156,8 +1429,69 @@
     bibtexBtn.setAttribute("data-bibtex", buildCiteBibtex(entry));
     links.appendChild(bibtexBtn);
 
-    article.append(tagsRow, title, authors, links);
+    if (compact) {
+      const authorRow = document.createElement("div");
+      authorRow.className = "pub-author-row";
+      authorRow.appendChild(authors);
+      if (authorsToggle) authorRow.appendChild(authorsToggle);
+      const details = document.createElement("div");
+      details.className = "pub-details";
+      details.appendChild(tagsRow);
+      if (contributionNote) details.appendChild(contributionNote);
+      details.appendChild(links);
+      article.append(title, authorRow, details);
+    } else {
+      article.append(tagsRow, title, authors);
+      if (authorsToggle) article.appendChild(authorsToggle);
+      if (contributionNote) article.appendChild(contributionNote);
+      article.appendChild(links);
+    }
     return article;
+  }
+
+  function groupPublicationsByCategory(entries) {
+    const groups = new Map();
+    entries.forEach((entry) => {
+      const category = (entry.fields.cat || "").trim() || "Other Publications";
+      if (!groups.has(category)) groups.set(category, []);
+      groups.get(category).push(entry);
+    });
+    return Array.from(groups, ([category, items]) => ({
+      category,
+      entries: items.slice().sort((a, b) => b.year - a.year),
+    }));
+  }
+
+  function renderGroupedPublications(container, entries) {
+    const groups = groupPublicationsByCategory(entries);
+    groups.forEach((group, index) => {
+      const section = document.createElement("section");
+      section.className = "pub-category";
+      const heading = document.createElement("div");
+      heading.className = "pub-category-heading";
+      const title = document.createElement("h2");
+      title.id = `${container.id || "publications"}-category-${index + 1}`;
+      title.textContent = group.category;
+      section.setAttribute("aria-labelledby", title.id);
+      const count = document.createElement("span");
+      count.className = "pub-category-count";
+      count.textContent = `${group.entries.length} ${group.entries.length === 1 ? "paper" : "papers"}`;
+      heading.append(title, count);
+      section.appendChild(heading);
+      if (group.category === "Theory & ML") {
+        const note = document.createElement("p");
+        note.className = "pub-category-note";
+        note.id = `${title.id}-note`;
+        note.textContent = "Authors are listed alphabetically. All authors contributed equally.";
+        section.setAttribute("aria-describedby", note.id);
+        section.appendChild(note);
+      }
+      const list = document.createElement("div");
+      list.className = "pub-list";
+      group.entries.forEach((entry) => list.appendChild(renderPublicationItem(entry, { compact: true })));
+      section.appendChild(list);
+      container.appendChild(section);
+    });
   }
 
   async function initPublicationsFromBibtex() {
@@ -1168,16 +1502,17 @@
       const response = await fetch("bibtex/yichuan_deng.bib", { cache: "no-store" });
       if (!response.ok) throw new Error(`Failed to load bibtex: ${response.status}`);
       const rawText = await response.text();
-      const entries = parseBibtexEntries(rawText).sort((a, b) => b.year - a.year);
-      const selectedEntries = entries.filter(isSelectedEntry);
+      const entries = parseBibtexEntries(rawText);
+      const sortedEntries = entries.slice().sort((a, b) => b.year - a.year);
+      const selectedEntries = sortedEntries.filter(isSelectedEntry);
       const hasExplicitSelected = selectedEntries.length > 0;
 
       containers.forEach((container) => {
         const mode = container.getAttribute("data-publications");
         const limit = Number.parseInt(container.getAttribute("data-limit") || "0", 10);
-        let list = entries;
+        let list = sortedEntries;
         if (mode === "selected") {
-          list = hasExplicitSelected ? selectedEntries : entries;
+          list = hasExplicitSelected ? selectedEntries : sortedEntries;
           if (limit > 0) list = list.slice(0, limit);
         }
 
@@ -1187,6 +1522,11 @@
           emptyItem.className = "pub-item pub-loading";
           emptyItem.innerHTML = "<p>No publications found in bibtex/yichuan_deng.bib.</p>";
           container.appendChild(emptyItem);
+          return;
+        }
+
+        if (mode === "all" && container.getAttribute("data-group-by") === "category") {
+          renderGroupedPublications(container, entries);
           return;
         }
 
@@ -1267,6 +1607,7 @@
 
     document.addEventListener("keydown", (event) => {
       if (!modal.classList.contains("is-open")) return;
+      trapDialogFocus(event, modal);
       if (event.key === "Escape") closeModal();
     });
   }
@@ -1367,11 +1708,18 @@
 
     // Profile card
     const photo = document.getElementById("profile-photo");
-    if (photo && meta.photo) { photo.src = meta.photo; photo.alt = "Portrait of " + (meta.name || ""); }
+    if (photo && meta.photo) {
+      photo.srcset = meta.photo_srcset || "";
+      photo.sizes = meta.photo_srcset ? "(max-width: 900px) 160px, 200px" : "";
+      photo.src = meta.photo_preview || meta.photo;
+      photo.alt = "Portrait of " + (meta.name || "");
+    }
     const pName = document.getElementById("profile-name");
     if (pName) pName.textContent = meta.name || "";
     const pTitle = document.getElementById("profile-title");
     if (pTitle) pTitle.textContent = meta.title || "";
+    const affiliation = document.getElementById("profile-affiliation");
+    if (affiliation) affiliation.textContent = meta.education?.[0]?.school || "";
 
     // Contact row
     const contactRow = document.getElementById("contact-row");
@@ -1380,10 +1728,13 @@
       if (meta.email) {
         const a = document.createElement("a");
         a.className = "social-icon";
-        a.href = "mailto:" + meta.email;
+        a.href = "mailto:" + meta.email.replace(/\s+AT\s+/i, "@").replace(/\s+/g, "");
         a.setAttribute("aria-label", "Email");
         a.title = "Email";
         a.innerHTML = EMAIL_SVG;
+        const label = document.createElement("span");
+        label.textContent = "Email";
+        a.appendChild(label);
         contactRow.appendChild(a);
       }
       if (meta.scholar) {
@@ -1395,6 +1746,9 @@
         a.setAttribute("aria-label", "Google Scholar");
         a.title = "Google Scholar";
         a.innerHTML = SCHOLAR_SVG;
+        const label = document.createElement("span");
+        label.textContent = "Google Scholar";
+        a.appendChild(label);
         contactRow.appendChild(a);
       }
     }
@@ -1478,9 +1832,8 @@
   initSmoothAnchorScroll();
   initContentFromMarkdown();
   const galleryApi = initGalleryLightbox();
-  const carouselApi = initGalleryCarousel();
   initGalleryFromManifest(galleryApi).then(() => {
-    carouselApi?.refresh?.();
+    initGalleryCarousel();
   });
   initGalleryPageFromManifest(galleryApi);
   initPublicationsFromBibtex();
