@@ -96,6 +96,12 @@ toggle.fire("click");
 assert(toggle.getAttribute("aria-expanded") === "false" && authors.textContent.includes("…"), "Authors should collapse again");
 const mvffn = entries.find((entry) => /mvffn/i.test(entry.key + entry.title));
 assert(site.renderPublicationItem(mvffn).querySelectorAll(".equal-contribution-marker").length === 3, "MVFFN must keep its first three co-first authors");
+for (const compact of [false, true]) {
+  const paperLink = site.renderPublicationItem(mvffn, { compact }).querySelector(".pub-links")
+    .querySelectorAll("a").find((link) => link.textContent === "Paper");
+  assert(paperLink && paperLink.href === "https://arxiv.org/pdf/2610.14315", "MVFFN must link to its arXiv PDF on both Selected and Full Publications");
+  assert(paperLink.target === "_blank" && paperLink.rel === "noopener noreferrer", "The paper link should open safely in a new tab");
+}
 assert(site.buildCiteBibtex(longEntry).includes(longEntry.fields.author), "Cite must retain the full author list");
 assert(!site.buildCiteBibtex(longEntry).includes("equal_contribution="), "Cite should omit site-only metadata");
 assert(entries.every((entry) => !site.buildCiteBibtex(entry).includes("cat=")), "Copied citations should omit category metadata");
