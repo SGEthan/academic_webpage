@@ -1,5 +1,6 @@
 # Deployment output
 _deploy/
+.local/
 
 # Gallery photos (keep manifest tracked)
 assets/gallery/*

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>照片 GPS 标注 · Local Studio</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="/assets/vendor/maplibre/maplibre-gl-5.24.0.css" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script defer src="/assets/vendor/maplibre/maplibre-gl-5.24.0.js"></script>
+    <script defer src="/app.js"></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <div><span class="wordmark">PHOTO LOCATIONS</span><h1>给照片一个坐标。</h1></div>
+      <div class="header-tools"><span class="local-badge">仅本地 · 确认后写入 JSON</span><button id="reload" type="button">刷新列表</button><button id="undo" type="button" disabled>撤销上一条</button></div>
+    </header>
+    <main class="workspace">
+      <aside class="photo-panel" aria-label="待标注照片">
+        <div class="panel-heading"><h2>待标注照片</h2><span id="progress">读取中…</span></div>
+        <figure class="selected-photo"><img id="selected-image" alt="" hidden /><div id="empty-photo">正在读取 gallery.json…</div></figure>
+        <div class="photo-details"><h3 id="photo-description">选择一张照片</h3><p id="photo-filename"></p></div>
+        <div class="queue-heading"><span>选择照片</span><span id="draft-count"></span></div>
+        <div id="photo-queue" class="photo-queue" role="group" aria-label="没有 GPS 的照片列表"></div>
+        <p class="panel-footnote">只列出缺少 GPS 的照片。原图和地点描述不会改变。</p>
+      </aside>
+      <section class="map-panel" aria-label="地图标注区域">
+        <div id="map" role="region" aria-label="点击地图选择照片拍摄位置" aria-describedby="map-help"></div>
+        <div class="map-heading"><div><span class="eyebrow">PIN THE MOMENT</span><p id="map-help">在地图上点击拍摄位置，再确认保存。</p></div><button id="world" type="button" disabled>世界视图</button></div>
+        <div id="map-error" class="map-error" role="status" hidden><p>地图暂时无法加载。仍可在下方直接填写经纬度。</p><button id="retry-map" type="button">重试地图</button></div>
+        <form id="coordinate-form" class="coordinate-card">
+          <div class="coordinate-heading"><h2>拍摄位置</h2><span id="selection-state">尚未选点</span></div>
+          <div class="coordinates"><label>纬度 Latitude<input id="latitude" type="number" step="any" min="-90" max="90" placeholder="47.606200" autocomplete="off" required /></label><label>经度 Longitude<input id="longitude" type="number" step="any" min="-180" max="180" placeholder="-122.332100" autocomplete="off" required /></label></div>
+          <div class="save-actions"><button id="reuse" type="button" disabled>沿用上一位置</button><button id="save" class="primary" type="submit" disabled>保存并下一张 <span aria-hidden="true">↗</span></button></div>
+          <p class="save-note">保存到 assets/gallery/gallery.json · 每次保存前自动备份</p>
+        </form>
+      </section>
+    </main>
+    <footer class="status-bar"><p id="status" role="status" aria-live="polite">连接本地标注服务…</p><span>OpenFreeMap / OpenStreetMap · 照片不上传</span></footer>
+  </body>
+</html>

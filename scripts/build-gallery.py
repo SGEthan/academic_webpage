@@ -6,9 +6,63 @@ Existing manifest order, captions, and custom fields are preserved.
 
 import argparse
 import json
+import math
 from pathlib import Path
 
-from PIL import Image, ImageOps
+from PIL import ExifTags, Image, ImageOps
+
+
+def read_photo_gps(image: Image.Image) -> dict | None:
+    """Decode EXIF DMS coordinates; never infer a place from a filename/title."""
+    try:
+        gps = image.getexif().get_ifd(ExifTags.IFD.GPSInfo)
+
+        def coordinate(value_tag: int, ref_tag: int, positive: str, negative: str, limit: int) -> float:
+            reference = gps[ref_tag]
+            if isinstance(reference, bytes):
+                reference = reference.decode("ascii")
+            reference = reference.strip("\x00 \t\r\n").upper()
+            degrees, minutes, seconds = (float(value) for value in gps[value_tag])
+            if reference not in (positive, negative):
+                raise ValueError("Missing hemisphere")
+            if not all(math.isfinite(value) and value >= 0 for value in (degrees, minutes, seconds)):
+                raise ValueError("Invalid GPS coordinate")
+            if minutes >= 60 or seconds >= 60:
+                raise ValueError("Invalid DMS coordinate")
+            value = degrees + minutes / 60 + seconds / 3600
+            if value > limit:
+                raise ValueError("Out-of-range GPS coordinate")
+            return round(-value if reference == negative else value, 6)
+
+        return {
+            "latitude": coordinate(2, 1, "N", "S", 90),
+            "longitude": coordinate(4, 3, "E", "W", 180),
+        }
+    except (KeyError, TypeError, ValueError, ZeroDivisionError, OverflowError, OSError, AttributeError):
+        return None
+
+
+def ensure_photo_gps(item: dict, image: Image.Image) -> None:
+    # Manual edits and an explicit null opt-out are authoritative. Empty pairs
+    # can be filled later if GPS is added to a source photo's EXIF metadata.
+    if "gps" not in item or item["gps"] == {"latitude": None, "longitude": None}:
+        item["gps"] = read_photo_gps(image) or {"latitude": None, "longitude": None}
+
+
+def extract_gallery_gps(root: Path) -> None:
+    """Update only manifest metadata; do not rebuild or modify any image."""
+    gallery = root / "assets/gallery"
+    manifest = gallery / "gallery.json"
+    items = json.loads(manifest.read_text(encoding="utf-8-sig"))
+    for item in items:
+        source = (root / item["src"]).resolve()
+        if not source.is_relative_to(gallery.resolve()) or not source.is_file():
+            raise ValueError(f"Missing or invalid gallery source: {item['src']}")
+        with Image.open(source) as image:
+            ensure_photo_gps(item, image)
+    manifest.write_text(json.dumps(items, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    located = sum(isinstance(item.get("gps"), dict) and item["gps"].get("latitude") is not None and item["gps"].get("longitude") is not None for item in items)
+    print(f"GPS: {located} photos have coordinates; {len(items) - located} need manual coordinates. Images unchanged.")
 
 
 def build_gallery(root: Path) -> None:
@@ -27,10 +81,13 @@ def build_gallery(root: Path) -> None:
     output.mkdir(exist_ok=True)
     total_bytes = {"small": 0, "thumb": 0, "display": 0}
     for item in items:
+        # User-authored location text must survive every regeneration.
+        item.setdefault("description", "")
         source = (root / item["src"]).resolve()
         if not source.is_relative_to(gallery.resolve()) or not source.is_file():
             raise ValueError(f"Missing or invalid gallery source: {item['src']}")
         with Image.open(source) as original:
+            ensure_photo_gps(item, original)
             image = ImageOps.exif_transpose(original)
             image = image.convert("RGBA" if "A" in image.getbands() else "RGB")
             item["width"], item["height"] = image.size
@@ -82,6 +139,11 @@ def build_profile(root: Path) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--site-root", type=Path, default=Path(__file__).resolve().parent.parent)
-    site_root = parser.parse_args().site_root.resolve()
-    build_gallery(site_root)
-    build_profile(site_root)
+    parser.add_argument("--gps-only", action="store_true", help="Extract missing GPS fields into gallery.json without rebuilding images")
+    args = parser.parse_args()
+    site_root = args.site_root.resolve()
+    if args.gps_only:
+        extract_gallery_gps(site_root)
+    else:
+        build_gallery(site_root)
+        build_profile(site_root)

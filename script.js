@@ -182,7 +182,12 @@
     button.setAttribute("data-full-src", item.display || item.src);
     const srcset = galleryImageSrcset(item);
     if (srcset) button.setAttribute("data-full-srcset", srcset);
-    if (item.caption) button.setAttribute("data-caption", item.caption);
+    const description = galleryDescription(item);
+    if (description) button.setAttribute("data-description", description);
+  }
+
+  function galleryDescription(item) {
+    return typeof item.description === "string" ? item.description.trim() : "";
   }
 
   function galleryPageImageSizes(span = 2) {
@@ -215,10 +220,7 @@
       const triggers = Array.from(document.querySelectorAll(".gallery-trigger"));
       galleryItems = triggers.map((trigger, index) => {
         const img = trigger.querySelector("img");
-        const caption =
-          trigger.getAttribute("data-caption") ||
-          trigger.parentElement?.querySelector("figcaption")?.textContent?.trim() ||
-          "";
+        const description = trigger.getAttribute("data-description") || "";
         const fullSrc = trigger.getAttribute("data-full-src") || img?.getAttribute("src") || "";
         trigger.setAttribute("data-gallery-index", String(index));
         return {
@@ -227,7 +229,7 @@
           width: Number(img?.getAttribute("width") || img?.naturalWidth || 0),
           height: Number(img?.getAttribute("height") || img?.naturalHeight || 0),
           alt: img?.getAttribute("alt") || "",
-          caption,
+          description,
         };
       });
     }
@@ -241,7 +243,8 @@
       imageEl.sizes = item.srcset ? galleryLightboxSizes(item) : "";
       imageEl.src = item.src;
       imageEl.alt = item.alt;
-      captionEl.textContent = item.caption;
+      captionEl.textContent = item.description;
+      captionEl.hidden = !item.description;
       // Warm only neighboring images, at the same responsive size used in the viewer.
       const connection = window.navigator?.connection;
       if (typeof window.Image !== "function" || connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType || "")) return;
@@ -315,6 +318,12 @@
 
     return {
       refresh: collectGalleryItems,
+      openBySrc(src) {
+        const index = galleryItems.findIndex((item) => item.src === src);
+        if (index < 0) return false;
+        openLightbox(index);
+        return true;
+      },
     };
   }
 
@@ -330,11 +339,12 @@
       items.forEach((item) => {
         const figure = document.createElement("figure");
         figure.className = "gallery-card";
+        const description = galleryDescription(item);
 
         const button = document.createElement("button");
         button.className = "gallery-trigger";
         button.type = "button";
-        button.setAttribute("aria-label", `Open image: ${item.alt || item.caption || "Gallery image"}`);
+        button.setAttribute("aria-label", `Open image: ${description || item.alt || item.caption || "Gallery image"}`);
         configureGalleryTrigger(button, item);
 
         const img = document.createElement("img");
@@ -347,7 +357,7 @@
           }
         };
         if (!item.width || !item.height) img.addEventListener("load", syncPreviewRatio, { once: true });
-        img.alt = item.alt || item.caption || "Gallery image";
+        img.alt = description || item.alt || item.caption || "Gallery image";
         img.loading = container.children.length < 3 ? "eager" : "lazy";
         img.decoding = "async";
         const ratio = item.width > 0 && item.height > 0 ? item.width / item.height : 1.6;
@@ -357,9 +367,13 @@
         button.appendChild(img);
 
         figure.appendChild(button);
-        if (item.caption) {
+        if (description) {
+          // Keep text inside the slide so dragging, looping, and autoplay move it
+          // with its photo, rather than swapping a separate fixed label.
           const caption = document.createElement("figcaption");
-          caption.textContent = item.caption;
+          caption.className = "gallery-preview-description";
+          caption.textContent = description;
+          caption.title = description;
           figure.appendChild(caption);
         }
         container.appendChild(figure);
@@ -405,11 +419,11 @@
         const button = document.createElement("button");
         button.className = "gallery-trigger";
         button.type = "button";
-        button.setAttribute("aria-label", `Open image: ${item.alt || item.caption || "Gallery image"}`);
+        button.setAttribute("aria-label", `Open image: ${galleryDescription(item) || item.alt || item.caption || "Gallery image"}`);
         configureGalleryTrigger(button, item);
 
         const img = document.createElement("img");
-        img.alt = item.alt || item.caption || "Gallery image";
+        img.alt = galleryDescription(item) || item.alt || item.caption || "Gallery image";
         img.loading = "lazy";
         img.decoding = "async";
         const setImageLayout = () => {
@@ -441,11 +455,21 @@
         button.appendChild(img);
 
         figure.appendChild(button);
+        const description = galleryDescription(item);
+        if (description) {
+          const caption = document.createElement("figcaption");
+          caption.className = "gallery-description";
+          caption.textContent = description;
+          figure.appendChild(caption);
+        }
         container.appendChild(figure);
       });
 
       window.requestAnimationFrame(() => layoutGalleryGrid(container, { optimize: true }));
       window.setTimeout(() => layoutGalleryGrid(container, { optimize: true }), 80);
+      if (document.fonts?.ready) {
+        document.fonts.ready.then(() => layoutGalleryGrid(container, { optimize: true }));
+      }
       if (!window.__galleryPageResizeBound) {
         window.__galleryPageResizeBound = true;
         let resizeTimer = null;
@@ -493,7 +517,17 @@
       const desiredSpan = normalizeSpan(card.dataset.span || card.dataset.defaultSpan, normalizeSpan(card.dataset.defaultSpan, 2));
       const span = Math.max(MIN_CARD_SPAN, Math.min(desiredSpan, columns));
       const width = colWidth * span + gap * (span - 1);
-      const height = width / ratio;
+      // Measure wrapped text at its actual width, without changing the image ratio.
+      card.style.width = `${width}px`;
+      const cardStyles = window.getComputedStyle(card);
+      const borderX = (Number.parseFloat(cardStyles.borderLeftWidth) || 0) + (Number.parseFloat(cardStyles.borderRightWidth) || 0);
+      const borderY = (Number.parseFloat(cardStyles.borderTopWidth) || 0) + (Number.parseFloat(cardStyles.borderBottomWidth) || 0);
+      const imageHeight = Math.max(0, width - borderX) / ratio;
+      const trigger = card.querySelector(".gallery-trigger");
+      if (trigger) trigger.style.height = `${imageHeight}px`;
+      const description = card.querySelector(".gallery-description");
+      if (description) description.style.width = `${Math.max(0, width - borderX)}px`;
+      const height = imageHeight + (description?.offsetHeight || 0) + borderY;
       const rand = Number.parseFloat(card.dataset.rand || "0") || 0;
       return { card, span, width, height, rand };
     });
@@ -574,6 +608,533 @@
 
     const maxHeight = Math.max(...heights, 0);
     container.style.height = `${Math.max(0, maxHeight - gap)}px`;
+  }
+
+  function galleryCoordinates(item) {
+    const latitude = item.gps?.latitude;
+    const longitude = item.gps?.longitude;
+    // Do not coerce null/empty values to zero and accidentally plot missing GPS.
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return null;
+    if (Math.abs(latitude) > 90 || Math.abs(longitude) > 180) return null;
+    return [latitude, longitude];
+  }
+
+  function groupGalleryLocations(items) {
+    const groups = new Map();
+    const unlocated = [];
+    items.forEach((item) => {
+      const coordinates = galleryCoordinates(item);
+      if (!coordinates) { unlocated.push(item); return; }
+      const key = coordinates.map((value) => value.toFixed(5)).join(",");
+      if (!groups.has(key)) groups.set(key, { coordinates, items: [] });
+      groups.get(key).items.push(item);
+    });
+    return { groups: Array.from(groups.values()), unlocated };
+  }
+
+  function galleryPhotoGeoJSON(items) {
+    return {
+      type: "FeatureCollection",
+      features: items.flatMap((item, index) => {
+        const coordinates = galleryCoordinates(item);
+        return coordinates ? [{
+          type: "Feature", id: index,
+          geometry: { type: "Point", coordinates: [coordinates[1], coordinates[0]] },
+          properties: { photo_id: index },
+        }] : [];
+      }),
+    };
+  }
+
+  function galleryGlobeStyle(style, dark) {
+    // Work on a copy: preserve the provider's source attribution and style data.
+    const copy = JSON.parse(JSON.stringify(style));
+    copy.projection = { type: "globe" };
+    copy.transition = { duration: 0, delay: 0 };
+    copy.layers.forEach((layer) => {
+      if (layer.type === "background") layer.paint["background-color"] = dark ? "#252b3b" : "#faf9fd";
+      if (layer.id === "water") layer.paint["fill-color"] = dark ? "#151a29" : "#e6e4ef";
+    });
+    return copy;
+  }
+
+  function galleryPhotoMarkerInfo(feature, items) {
+    const properties = feature.properties || {};
+    const clustered = Boolean(properties.cluster);
+    const photoId = clustered ? properties.cover_id : properties.photo_id;
+    const item = Number.isInteger(photoId) ? items[photoId] : null;
+    const coordinates = feature.geometry?.coordinates;
+    if (!item || !galleryCoordinates(item) || feature.geometry?.type !== "Point" ||
+        !Array.isArray(coordinates) || coordinates.length !== 2 || !coordinates.every(Number.isFinite)) return null;
+    if (clustered && (!Number.isInteger(properties.cluster_id) || !Number.isInteger(properties.point_count) || properties.point_count < 2)) return null;
+    return { key: clustered ? `cluster:${properties.cluster_id}` : `photo:${photoId}`,
+      clustered, photoId, item, count: clustered ? properties.point_count : 1, coordinates, feature };
+  }
+
+  function galleryPhotoPreviewSize(item, bounds) {
+    const valid = Number.isFinite(item.width) && item.width > 0 && Number.isFinite(item.height) && item.height > 0;
+    const width = valid ? item.width : 1, height = valid ? item.height : 1;
+    const scale = Math.min(bounds.width / width, bounds.height / height, valid ? 1 : Infinity);
+    return { width: width * scale, height: height * scale };
+  }
+
+  let galleryGlobeLibraryPromise = null;
+  function loadGalleryGlobeLibrary() {
+    if (galleryGlobeLibraryPromise) return galleryGlobeLibraryPromise;
+    const load = (tag, path, id) => new Promise((resolve, reject) => {
+      if (document.getElementById(id)) { resolve(); return; }
+      const element = document.createElement(tag);
+      element.id = id;
+      const fail = () => { window.clearTimeout(timeout); element.remove(); reject(new Error("Globe assets could not load")); };
+      const timeout = window.setTimeout(fail, 20000);
+      element.onload = () => { window.clearTimeout(timeout); resolve(); };
+      element.onerror = fail;
+      if (tag === "link") { element.rel = "stylesheet"; element.href = path; }
+      else { element.src = path; element.async = true; }
+      document.head.appendChild(element);
+    });
+    galleryGlobeLibraryPromise = Promise.all([
+      load("link", "assets/vendor/maplibre/maplibre-gl-5.24.0.css", "gallery-maplibre-css"),
+      window.maplibregl ? Promise.resolve() : load("script", "assets/vendor/maplibre/maplibre-gl-5.24.0.js", "gallery-maplibre-js"),
+    ]).then(() => window.maplibregl).catch((error) => { galleryGlobeLibraryPromise = null; throw error; });
+    return galleryGlobeLibraryPromise;
+  }
+
+  const galleryBasemapPromises = new Map();
+  function loadGalleryBasemap(dark) {
+    const name = dark ? "dark" : "positron";
+    if (!galleryBasemapPromises.has(name)) {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 20000);
+      const pending = fetch("https://tiles.openfreemap.org/styles/" + name, { signal: controller.signal })
+        .then((response) => { if (!response.ok) throw new Error("Basemap could not load"); return response.json(); })
+        .catch((error) => { galleryBasemapPromises.delete(name); throw error; })
+        .finally(() => window.clearTimeout(timeout));
+      galleryBasemapPromises.set(name, pending);
+    }
+    return galleryBasemapPromises.get(name);
+  }
+
+  async function initGalleryGlobe(loadLibrary = loadGalleryGlobeLibrary, loadBasemap = loadGalleryBasemap) {
+    const get = (name) => document.getElementById("gallery-" + name);
+    const gridTab = get("grid-tab"), globeTab = get("globe-tab");
+    const gridPanel = get("grid-panel"), panel = get("globe-panel");
+    const stage = get("globe-stage"), container = get("globe-map");
+    if (!gridTab || !globeTab || !gridPanel || !panel || !container) return;
+    const message = get("globe-message"), retry = get("globe-retry"), rotate = get("globe-rotate");
+    const reset = get("globe-reset"), zoomIn = get("globe-zoom-in"), zoomOut = get("globe-zoom-out");
+    let items;
+    try { items = await loadGalleryManifest(); }
+    catch (_) { return; }
+    const { groups } = groupGalleryLocations(items);
+    const geojson = galleryPhotoGeoJSON(items);
+    const located = items.filter((item) => galleryCoordinates(item));
+    globeTab.disabled = false;
+
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const colorScheme = window.matchMedia("(prefers-color-scheme: dark)");
+    const isDark = () => {
+      const mode = document.documentElement.getAttribute("data-theme");
+      return mode === "dark" || (!mode && colorScheme.matches);
+    };
+    let map = null, maplibre = null, pending = null, ready = false;
+    const photoMarkers = new Map();
+    let frame = 0, lastTime = 0, spinning = false, rotating = !motion.matches, rotationExplicit = false;
+    let hovered = false, focused = false;
+    let inView = true, pageActive = true, dialogOpen = false, contextLost = false, disposed = false;
+    let selectedPhoto = null, activeMarkerKey = null, photoPopup = null, popupOrigin = null, resizePhotoPreview = null;
+    let styleRevision = 0, currentDark = isDark();
+    let loadTimeout = null, clickRevision = 0;
+    const overviewZoom = () => {
+      const bounds = stage.getBoundingClientRect();
+      return Math.log2(Math.max(240, Math.min(bounds.width, bounds.height)) / 512) + 1.2;
+    };
+    const overviewCenter = located.length ? [galleryCoordinates(located[0])[1], 25] : [0, 20];
+    const showMessage = (text, canRetry = false) => {
+      message.textContent = text; message.hidden = !text; retry.hidden = !canRetry;
+    };
+    const setControls = (enabled) => {
+      [rotate, reset, zoomIn, zoomOut].forEach((button) => { button.disabled = !enabled; });
+    };
+    const updateRotationLabel = () => {
+      rotate.textContent = rotating ? "Pause rotation" : "Resume rotation";
+      rotate.setAttribute("aria-pressed", String(rotating));
+    };
+    updateRotationLabel();
+
+    const canSpin = () => map && ready && rotating && (rotationExplicit || (!hovered && !focused)) && inView && pageActive &&
+      !panel.hidden && !document.hidden && !dialogOpen && !photoPopup && !contextLost && !disposed && map.getZoom() <= overviewZoom() + 0.3;
+    const tick = (time) => {
+      frame = 0;
+      if (!canSpin()) return;
+      const elapsed = lastTime ? time - lastTime : 32;
+      if (elapsed >= 32 && !map.isMoving()) {
+        const center = map.getCenter();
+        spinning = true;
+        map.jumpTo({ center: [center.lng + Math.min(elapsed, 64) * 0.002, center.lat] });
+        spinning = false;
+        lastTime = time;
+      }
+      if (canSpin()) frame = window.requestAnimationFrame(tick);
+    };
+    const syncAnimation = () => {
+      if (!canSpin()) {
+        if (frame) window.cancelAnimationFrame(frame);
+        frame = 0; lastTime = 0;
+      } else if (!frame) { lastTime = 0; frame = window.requestAnimationFrame(tick); }
+    };
+    const pauseRotation = () => { rotating = false; rotationExplicit = false; updateRotationLabel(); syncAnimation(); };
+    const moveCamera = (options) => {
+      if (!map || contextLost) return;
+      map.stop();
+      map.easeTo({ ...options, duration: motion.matches ? 0 : 950 });
+    };
+    const highlightPhoto = () => {
+      const selectedId = items.indexOf(selectedPhoto);
+      photoMarkers.forEach((entry) => {
+        const active = entry.info.key === activeMarkerKey || entry.info.photoId === selectedId;
+        entry.element.setAttribute("data-selected", String(active));
+        entry.element.style.zIndex = active ? "2" : "1";
+      });
+    };
+    const clearPhotoMarkers = () => {
+      photoMarkers.forEach((entry) => entry.marker.remove());
+      photoMarkers.clear();
+    };
+    const closePhotoPopup = (restoreFocus = false) => {
+      clickRevision++;
+      const origin = popupOrigin;
+      if (photoPopup) photoPopup.remove();
+      if (restoreFocus) (origin && container.contains(origin) ? origin : map?.getCanvas())?.focus();
+    };
+    const openPhotoPopup = (photos, info, initialPhoto = photos[0]) => {
+      if (!photos.length || !map || !ready) return;
+      closePhotoPopup(); pauseRotation();
+      const card = document.createElement("div");
+      card.className = "gallery-globe-preview";
+      card.setAttribute("role", "dialog");
+      card.setAttribute("aria-label", "Photo preview");
+      const close = document.createElement("button");
+      close.type = "button"; close.className = "gallery-globe-preview-close";
+      close.textContent = "×"; close.setAttribute("aria-label", "Close photo preview");
+      close.addEventListener("click", () => closePhotoPopup(true));
+      card.appendChild(close);
+      const figure = document.createElement("figure");
+      const image = document.createElement("img");
+      image.decoding = "async";
+      const caption = document.createElement("figcaption");
+      caption.setAttribute("aria-live", "polite");
+      figure.appendChild(image); figure.appendChild(caption); card.appendChild(figure);
+      const navigation = document.createElement("div");
+      navigation.className = "gallery-globe-preview-navigation";
+      navigation.hidden = photos.length < 2;
+      const previous = document.createElement("button"), next = document.createElement("button"), count = document.createElement("span");
+      previous.type = next.type = "button";
+      previous.textContent = "‹"; next.textContent = "›";
+      previous.setAttribute("aria-label", "Previous photo in this group");
+      next.setAttribute("aria-label", "Next photo in this group");
+      count.setAttribute("aria-live", "polite");
+      navigation.appendChild(previous); navigation.appendChild(count); navigation.appendChild(next);
+      card.appendChild(navigation);
+      let index = Math.max(0, photos.indexOf(initialPhoto));
+      const resizePreview = () => {
+        const item = photos[index];
+        const bounds = stage.getBoundingClientRect();
+        const dimensions = item.width > 0 && item.height > 0 ? item : {
+          width: image.complete ? image.naturalWidth : 0,
+          height: image.complete ? image.naturalHeight : 0,
+        };
+        const size = galleryPhotoPreviewSize(dimensions, {
+          width: Math.max(1, Math.min(320, bounds.width - 48, (window.innerWidth || bounds.width) - 48)),
+          height: Math.max(1, Math.min(320, bounds.height - 120, (window.innerHeight || bounds.height) * 0.45)),
+        });
+        // Size the card itself, not just the image inside a fixed-width landscape frame.
+        card.style.width = `${size.width}px`;
+        image.style.height = `${size.height}px`;
+        image.sizes = `${Math.ceil(size.width)}px`;
+        photoPopup?.setLngLat(info.coordinates);
+      };
+      resizePhotoPreview = resizePreview;
+      const renderPhoto = () => {
+        const item = photos[index];
+        selectedPhoto = item;
+        image.alt = galleryDescription(item) || item.alt || "Gallery image";
+        configureGalleryImage(image, item, "(max-width: 420px) 75vw, 320px");
+        caption.textContent = galleryDescription(item); caption.hidden = !caption.textContent;
+        count.textContent = `${index + 1} / ${photos.length}`;
+        highlightPhoto();
+        resizePreview();
+      };
+      const navigate = (step) => { index = (index + step + photos.length) % photos.length; renderPhoto(); };
+      previous.addEventListener("click", () => navigate(-1));
+      next.addEventListener("click", () => navigate(1));
+      card.addEventListener("click", (event) => event.stopPropagation());
+      card.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); closePhotoPopup(true); }
+        else if (photos.length > 1 && ["ArrowLeft", "ArrowRight"].includes(event.key)) {
+          event.preventDefault(); event.stopPropagation(); navigate(event.key === "ArrowLeft" ? -1 : 1);
+        }
+      });
+      activeMarkerKey = info.key;
+      popupOrigin = photoMarkers.get(info.key)?.element;
+      renderPhoto();
+      // Native anchoring keeps the enlarged image attached to its location, not a sidebar or full-screen modal.
+      const popup = new maplibre.Popup({ className: "gallery-globe-popup", closeButton: false,
+        closeOnClick: false, closeOnMove: true, focusAfterOpen: true, maxWidth: "none",
+        offset: 12, subpixelPositioning: true, locationOccludedOpacity: 0,
+        padding: { top: 12, right: 12, bottom: 28, left: 12 } });
+      photoPopup = popup;
+      popup.on("close", () => {
+        if (photoPopup !== popup) return;
+        photoPopup = null; popupOrigin = null; activeMarkerKey = null; selectedPhoto = null; resizePhotoPreview = null;
+        highlightPhoto();
+      });
+      popup.setLngLat(info.coordinates).setDOMContent(card).addTo(map);
+      image.addEventListener("load", () => { if (photoPopup === popup) resizePreview(); });
+    };
+    if (!located.length) {
+      stage.hidden = true;
+      get("globe-hint").textContent = "No photos have GPS coordinates yet. You can still browse them in Gallery.";
+    }
+
+    const addPhotoLayers = () => {
+      if (!map.getSource("gallery-photos")) map.addSource("gallery-photos", {
+        type: "geojson", data: geojson, maxzoom: 19, cluster: true, clusterRadius: 44, clusterMaxZoom: 18,
+        clusterProperties: { cover_id: ["min", ["get", "photo_id"]] },
+      });
+      // Keep the source active, but render the actual photo cards as HTML markers.
+      map.addLayer({
+        id: "gallery-photo-anchors", type: "circle", source: "gallery-photos",
+        paint: { "circle-radius": 1, "circle-opacity": 0 },
+      });
+      ready = true;
+      updatePhotoMarkers(); setControls(true); syncAnimation();
+    };
+    const onClusterClick = async (info) => {
+      const cluster = info.feature;
+      if (!cluster || !ready) return;
+      const revision = ++clickRevision;
+      pauseRotation();
+      try {
+        const source = map.getSource("gallery-photos");
+        const leaves = await source.getClusterLeaves(cluster.properties.cluster_id, cluster.properties.point_count, 0);
+        if (revision !== clickRevision || disposed || panel.hidden) return;
+        const photos = leaves.map((leaf) => items[leaf.properties.photo_id]).filter(Boolean);
+        photos.sort((a, b) => items.indexOf(a) - items.indexOf(b));
+        openPhotoPopup(photos, info, info.item);
+      } catch (_) { showMessage("That photo group could not open. Please try again, or browse Gallery."); }
+    };
+    const onPhotoClick = (info) => {
+      const item = info.item;
+      clickRevision++; pauseRotation();
+      const group = groups.find((group) => group.items.includes(item));
+      if (group) openPhotoPopup(group.items, info, item);
+    };
+    const updatePhotoMarkers = () => {
+      if (!map || !ready || contextLost || disposed || panel.hidden || !map.isSourceLoaded("gallery-photos")) return;
+      const visible = new Set();
+      map.querySourceFeatures("gallery-photos").forEach((feature) => {
+        const info = galleryPhotoMarkerInfo(feature, items);
+        if (!info || visible.has(info.key)) return; // Features can appear in multiple source tiles.
+        visible.add(info.key);
+        let entry = photoMarkers.get(info.key);
+        if (!entry) {
+          const button = document.createElement("button");
+          button.type = "button"; button.className = "gallery-globe-pin";
+          button.setAttribute("data-cluster", String(info.clustered));
+          button.setAttribute("data-photo-id", String(info.photoId));
+          const image = document.createElement("img");
+          image.src = info.item.small || info.item.thumb || info.item.src;
+          image.alt = ""; image.decoding = "async";
+          button.appendChild(image);
+          const badge = document.createElement("span");
+          badge.className = "gallery-globe-pin-count";
+          badge.setAttribute("aria-hidden", "true");
+          button.appendChild(badge);
+          const marker = new maplibre.Marker({ element: button, anchor: "bottom", offset: [0, -10],
+            opacityWhenCovered: 0, subpixelPositioning: true }).setLngLat(info.coordinates).addTo(map);
+          entry = { marker, element: button, badge, info };
+          button.addEventListener("click", (event) => {
+            event.stopPropagation?.();
+            return entry.info.clustered
+              ? onClusterClick(entry.info)
+              : onPhotoClick(entry.info);
+          });
+          photoMarkers.set(info.key, entry);
+        }
+        if (entry.info.coordinates.join(",") !== info.coordinates.join(",")) entry.marker.setLngLat(info.coordinates);
+        entry.info = info;
+        entry.badge.textContent = String(info.count);
+        entry.badge.hidden = !info.clustered;
+        const description = galleryDescription(info.item) || "Photo location";
+        const label = info.clustered ? `${info.count} photos near ${description}. Click to preview.` : `View photo: ${description}`;
+        entry.element.setAttribute("aria-label", label);
+        entry.element.title = label;
+      });
+      photoMarkers.forEach((entry, key) => {
+        if (!visible.has(key)) { entry.marker.remove(); photoMarkers.delete(key); }
+      });
+      highlightPhoto();
+    };
+    const resize = () => { if (map && !panel.hidden && !contextLost) { map.resize(); resizePhotoPreview?.(); syncAnimation(); } };
+    const ensureGlobe = () => {
+      if (map) { resize(); syncAnimation(); return Promise.resolve(); }
+      if (pending) return pending;
+      if (!located.length || disposed) return Promise.resolve();
+      currentDark = isDark();
+      showMessage("Loading globe…");
+      panel.setAttribute("aria-busy", "true");
+      pending = (async () => {
+        try {
+          const [library, style] = await Promise.all([loadLibrary(), loadBasemap(currentDark)]);
+          if (panel.hidden || disposed) return;
+          maplibre = library;
+          map = new maplibre.Map({
+            container, style: galleryGlobeStyle(style, currentDark),
+            center: overviewCenter, zoom: overviewZoom(), minZoom: -1, maxZoom: 19,
+            pitch: 0, bearing: 0, maxPitch: 60, cooperativeGestures: true,
+            renderWorldCopies: false, attributionControl: false,
+            pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+            canvasContextAttributes: { antialias: true },
+          });
+          map.addControl(new maplibre.AttributionControl({ compact: true }), "bottom-right");
+          map.on("style.load", () => {
+            map.setProjection({ type: "globe" });
+            addPhotoLayers();
+            map.setSky({ "sky-color": currentDark ? "#0f1117" : "#ffffff",
+              "horizon-color": currentDark ? "#312441" : "#e8e2f2",
+              "fog-color": currentDark ? "#151a29" : "#ffffff", "atmosphere-blend": 0.15 });
+            panel.setAttribute("aria-busy", "false");
+          });
+          map.on("load", () => {
+            window.clearTimeout(loadTimeout); showMessage(""); syncAnimation();
+          });
+          map.on("error", () => {
+            showMessage("Some map details could not load. Photos are still available; retry to reload the map.", true);
+            panel.setAttribute("aria-busy", "false");
+          });
+          map.on("render", updatePhotoMarkers);
+          map.on("click", () => closePhotoPopup());
+          map.on("sourcedata", (event) => { if (event.sourceId === "gallery-photos") updatePhotoMarkers(); });
+          ["dragstart", "zoomstart", "rotatestart", "pitchstart"].forEach((name) => map.on(name, (event) => {
+            if (event.originalEvent) { closePhotoPopup(); pauseRotation(); }
+          }));
+          map.on("moveend", () => { if (!spinning) syncAnimation(); });
+          map.on("webglcontextlost", () => {
+            closePhotoPopup();
+            contextLost = true; setControls(false); syncAnimation();
+            showMessage("The globe paused because its graphics context was lost. Photos remain available.");
+          });
+          map.on("webglcontextrestored", () => {
+            contextLost = false; setControls(ready); showMessage(""); syncAnimation();
+          });
+          loadTimeout = window.setTimeout(() => {
+            showMessage("Map details are taking longer than expected. You can keep browsing photos or retry.", true);
+            panel.setAttribute("aria-busy", "false");
+          }, 25000);
+          if (isDark() !== currentDark) updateAppearance();
+        } catch (_) {
+          clearPhotoMarkers();
+          if (map) map.remove();
+          map = null; ready = false;
+          setControls(false);
+          panel.setAttribute("aria-busy", "false");
+          showMessage("The globe could not load. You can still explore the photos here or in Gallery.", true);
+        } finally { pending = null; }
+      })();
+      return pending;
+    };
+    const selectView = async (showGlobe) => {
+      gridTab.setAttribute("aria-selected", String(!showGlobe));
+      globeTab.setAttribute("aria-selected", String(showGlobe));
+      gridTab.tabIndex = showGlobe ? -1 : 0; globeTab.tabIndex = showGlobe ? 0 : -1;
+      gridPanel.hidden = showGlobe; panel.hidden = !showGlobe;
+      if (!showGlobe) { closePhotoPopup(); if (map) map.stop(); }
+      syncAnimation();
+      if (showGlobe) await ensureGlobe();
+      else window.requestAnimationFrame(() => layoutGalleryGrid(document.querySelector("[data-gallery-page]"), { optimize: true }));
+    };
+    gridTab.addEventListener("click", () => selectView(false));
+    globeTab.addEventListener("click", () => selectView(true));
+    [gridTab, globeTab].forEach((tab) => tab.addEventListener("keydown", (event) => {
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      const next = event.key === "Home" ? gridTab : event.key === "End" ? globeTab : tab === gridTab ? globeTab : gridTab;
+      next.focus(); return selectView(next === globeTab);
+    }));
+    rotate.addEventListener("click", () => {
+      closePhotoPopup();
+      rotating = !rotating;
+      // An explicit Resume must win over hover/focus left behind by dragging the map.
+      rotationExplicit = rotating;
+      if (rotating) moveCamera({ zoom: overviewZoom(), bearing: 0, pitch: 0 });
+      updateRotationLabel(); syncAnimation();
+    });
+    reset.addEventListener("click", () => {
+      closePhotoPopup(); pauseRotation();
+      moveCamera({ center: overviewCenter, zoom: overviewZoom(), bearing: 0, pitch: 0 });
+    });
+    zoomIn.addEventListener("click", () => { closePhotoPopup(); pauseRotation(); moveCamera({ zoom: Math.min(19, map.getZoom() + 1) }); });
+    zoomOut.addEventListener("click", () => { closePhotoPopup(); pauseRotation(); moveCamera({ zoom: Math.max(-1, map.getZoom() - 1) }); });
+    retry.addEventListener("click", () => {
+      clickRevision++; styleRevision++;
+      window.clearTimeout(loadTimeout); pauseRotation();
+      closePhotoPopup();
+      clearPhotoMarkers();
+      if (map) map.remove();
+      map = null; ready = false; contextLost = false;
+      container.textContent = ""; setControls(false);
+      return ensureGlobe();
+    });
+    stage.addEventListener("pointerenter", (event) => { if (event.pointerType !== "touch") { hovered = true; syncAnimation(); } });
+    stage.addEventListener("pointerleave", () => { hovered = false; syncAnimation(); });
+    container.addEventListener("focusin", () => { focused = true; syncAnimation(); });
+    container.addEventListener("focusout", (event) => { if (!container.contains(event.relatedTarget)) { focused = false; syncAnimation(); } });
+    container.addEventListener("keydown", (event) => {
+      if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "+", "-", "="].includes(event.key)) pauseRotation();
+    });
+    document.addEventListener("visibilitychange", () => { if (document.hidden && map) map.stop(); syncAnimation(); });
+    document.addEventListener("site:dialogchange", (event) => {
+      dialogOpen = event.detail.open;
+      if (dialogOpen && map) map.stop();
+      syncAnimation();
+    });
+    motion.addEventListener("change", () => { if (motion.matches) { if (map) map.stop(); pauseRotation(); } });
+    const updateAppearance = async () => {
+      const revision = ++styleRevision;
+      if (!map || disposed || isDark() === currentDark) return;
+      const dark = isDark();
+      try {
+        const style = await loadBasemap(dark);
+        if (revision !== styleRevision || !map || disposed) return;
+        currentDark = dark; ready = false; syncAnimation();
+        closePhotoPopup();
+        clearPhotoMarkers();
+        map.setStyle(galleryGlobeStyle(style, dark), { diff: false });
+      } catch (_) {
+        if (revision === styleRevision && map && !disposed) showMessage("The new map theme could not load. Photos and the current map remain available.", true);
+      }
+    };
+    colorScheme.addEventListener("change", updateAppearance);
+    if (window.MutationObserver) new window.MutationObserver(updateAppearance).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    if (window.ResizeObserver) new window.ResizeObserver(resize).observe(stage);
+    else window.addEventListener("resize", resize);
+    if (window.IntersectionObserver) new window.IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      if (!inView && map) map.stop();
+      syncAnimation();
+    }).observe(stage);
+    window.addEventListener("pagehide", (event) => {
+      pageActive = false; if (map) map.stop(); syncAnimation();
+      if (!event.persisted) {
+        disposed = true; styleRevision++; clickRevision++; window.clearTimeout(loadTimeout);
+        closePhotoPopup();
+        clearPhotoMarkers();
+        if (map) map.remove();
+      }
+    });
+    window.addEventListener("pageshow", () => { pageActive = true; resize(); syncAnimation(); });
+    if (window.location?.hash === "#globe") selectView(true);
   }
 
   function getSavedGalleryOrder() {
@@ -925,6 +1486,8 @@
     const slides = Array.from(track.querySelectorAll(".gallery-card:not(.gallery-loading)"));
     const total = slides.length;
     const formatIndex = (value) => String(value).padStart(2, "0");
+    const hasDescriptions = slides.some((slide) => Boolean(slide.querySelector(".gallery-trigger")?.getAttribute("data-description")));
+    carouselRoot.classList.toggle("has-descriptions", hasDescriptions);
 
     function setUi(selectedIndex) {
       const safeIndex = total ? ((selectedIndex % total) + total) % total : 0;
@@ -938,7 +1501,7 @@
         else slide.removeAttribute("aria-current");
         const trigger = slide.querySelector(".gallery-trigger");
         if (trigger) trigger.tabIndex = isActive ? 0 : -1;
-        // Warm the selected image and its neighbors before the next one-second step.
+        // Warm the selected image and its neighbors before the next autoplay step.
         if ([safeIndex, (safeIndex + 1) % total, (safeIndex - 1 + total) % total].includes(index)) {
           const img = slide.querySelector("img");
           if (img) img.loading = "eager";
@@ -986,7 +1549,7 @@
       function reconcile() {
         stop();
         if (userPaused || focusPaused || dialogPaused || hoverPaused || pointerPaused || !pageVisible || !carouselVisible) return;
-        timer = window.setInterval(goNext, 1000);
+        timer = window.setInterval(goNext, 2000);
       }
 
       autoplayBtn.addEventListener("pointerdown", () => {
@@ -1835,7 +2398,7 @@
   initGalleryFromManifest(galleryApi).then(() => {
     initGalleryCarousel();
   });
-  initGalleryPageFromManifest(galleryApi);
+  initGalleryPageFromManifest(galleryApi).then(() => initGalleryGlobe());
   initPublicationsFromBibtex();
   initBibtexModal();
 })();

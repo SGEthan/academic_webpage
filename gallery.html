@@ -15,7 +15,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=61fcd5f2633f" />
+    <link rel="stylesheet" href="styles.css?v=6358b7f6f731" />
   </head>
   <body>
     <header class="site-header">
@@ -35,16 +35,44 @@
     </header>
 
     <main>
-      <section class="section container gallery-page-section" style="padding-top: 5rem">
+      <section class="section container gallery-page-section">
         <div class="section-title">
           <h2>Full Gallery</h2>
           <p>A full collection of photos. Click any image to preview.</p>
           <a class="view-all-btn" href="index.html#gallery">← Back to Homepage Gallery</a>
         </div>
-        <div class="gallery-page-grid" data-gallery-page>
-          <figure class="gallery-card gallery-loading">
-            <figcaption>Loading gallery...</figcaption>
-          </figure>
+        <div class="gallery-views">
+          <div class="gallery-view-tabs" role="tablist" aria-label="Gallery view">
+            <button class="gallery-view-tab" id="gallery-grid-tab" type="button" role="tab" aria-selected="true" aria-controls="gallery-grid-panel">Gallery</button>
+            <button class="gallery-view-tab" id="gallery-globe-tab" type="button" role="tab" aria-selected="false" aria-controls="gallery-globe-panel" tabindex="-1" disabled>Globe</button>
+          </div>
+          <div id="gallery-grid-panel" role="tabpanel" aria-labelledby="gallery-grid-tab">
+            <div class="gallery-page-grid" data-gallery-page>
+              <figure class="gallery-card gallery-loading">
+                <figcaption>Loading gallery...</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="gallery-globe-panel" id="gallery-globe-panel" role="tabpanel" aria-labelledby="gallery-globe-tab" hidden>
+            <div class="gallery-globe-layout">
+              <div class="gallery-globe-world">
+                <div class="gallery-globe-stage" id="gallery-globe-stage">
+                  <div class="gallery-globe-map" id="gallery-globe-map" role="region" aria-label="Photo locations on a zoomable globe" aria-describedby="gallery-globe-hint"></div>
+                  <div class="gallery-globe-navigation" role="group" aria-label="Globe navigation">
+                    <button id="gallery-globe-zoom-in" type="button" aria-label="Zoom in" disabled>+</button>
+                    <button id="gallery-globe-zoom-out" type="button" aria-label="Zoom out" disabled>−</button>
+                  </div>
+                </div>
+                <div class="gallery-globe-controls">
+                  <p id="gallery-globe-hint">Click a photo to expand · Drag to explore · + / − to zoom</p>
+                  <button class="gallery-globe-action" id="gallery-globe-reset" type="button" disabled>Overview</button>
+                  <button class="gallery-globe-action" id="gallery-globe-rotate" type="button" aria-pressed="true" disabled>Pause rotation</button>
+                </div>
+                <p class="gallery-globe-message" id="gallery-globe-message" role="status" hidden></p>
+                <button class="gallery-globe-action" id="gallery-globe-retry" type="button" hidden>Retry globe</button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
@@ -56,7 +84,7 @@
         <button class="lightbox-nav lightbox-prev" id="lightbox-prev" type="button" aria-label="Previous image">‹</button>
         <img id="lightbox-image" src="" alt="" />
         <button class="lightbox-nav lightbox-next" id="lightbox-next" type="button" aria-label="Next image">›</button>
-        <p id="lightbox-caption"></p>
+        <p id="lightbox-caption" aria-live="polite" aria-atomic="true" hidden></p>
       </div>
     </div>
 
@@ -66,6 +94,6 @@
         <a href="index.html#top">Back to home</a>
       </div>
     </footer>
-    <script src="script.js?v=30ca1817111a"></script>
+    <script src="script.js?v=c57d42506e9a"></script>
   </body>
 </html>

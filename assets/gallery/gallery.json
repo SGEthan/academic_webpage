@@ -4,6 +4,7 @@
     "thumb": "assets/gallery/optimized/174A0921.jpg.thumb.webp",
     "alt": "174A0921",
     "caption": "174A0921",
+    "description": "University District, Seattle, WA",
     "width": 4000,
     "height": 6000,
     "display": "assets/gallery/optimized/174A0921.jpg.display.webp",
@@ -24,13 +25,18 @@
         "height": 2560
       }
     ],
-    "small": "assets/gallery/optimized/174A0921.jpg.small.webp"
+    "small": "assets/gallery/optimized/174A0921.jpg.small.webp",
+    "gps": {
+      "latitude": 47.669172,
+      "longitude": -122.315224
+    }
   },
   {
     "src": "assets/gallery/174A1604.jpg",
     "thumb": "assets/gallery/optimized/174A1604.jpg.thumb.webp",
     "alt": "174A1604",
     "caption": "174A1604",
+    "description": "Gold Creek Pond, Snoqualmie, WA",
     "width": 4000,
     "height": 6000,
     "display": "assets/gallery/optimized/174A1604.jpg.display.webp",
@@ -51,13 +57,18 @@
         "height": 2560
       }
     ],
-    "small": "assets/gallery/optimized/174A1604.jpg.small.webp"
+    "small": "assets/gallery/optimized/174A1604.jpg.small.webp",
+    "gps": {
+      "latitude": 47.399117,
+      "longitude": -121.380633
+    }
   },
   {
     "src": "assets/gallery/174A3427.jpg",
     "thumb": "assets/gallery/optimized/174A3427.jpg.thumb.webp",
     "alt": "174A3427",
     "caption": "174A3427",
+    "description": "Post & Pour, Bonney Lake, WA",
     "width": 4000,
     "height": 6000,
     "display": "assets/gallery/optimized/174A3427.jpg.display.webp",
@@ -78,13 +89,18 @@
         "height": 2560
       }
     ],
-    "small": "assets/gallery/optimized/174A3427.jpg.small.webp"
+    "small": "assets/gallery/optimized/174A3427.jpg.small.webp",
+    "gps": {
+      "latitude": 47.129212,
+      "longitude": -122.176392
+    }
   },
   {
     "src": "assets/gallery/174A4665 (1).jpg",
     "thumb": "assets/gallery/optimized/174A4665 (1).jpg.thumb.webp",
     "alt": "174A4665 (1)",
     "caption": "174A4665 (1)",
+    "description": "Alviso Marina County Park, San Jose, CA",
     "width": 6000,
     "height": 4000,
     "display": "assets/gallery/optimized/174A4665 (1).jpg.display.webp",
@@ -105,13 +121,18 @@
         "height": 1707
       }
     ],
-    "small": "assets/gallery/optimized/174A4665 (1).jpg.small.webp"
+    "small": "assets/gallery/optimized/174A4665 (1).jpg.small.webp",
+    "gps": {
+      "latitude": 37.430755,
+      "longitude": -121.980676
+    }
   },
   {
     "src": "assets/gallery/174A4913.jpg",
     "thumb": "assets/gallery/optimized/174A4913.jpg.thumb.webp",
     "alt": "174A4913",
     "caption": "174A4913",
+    "description": "CA-46, Templeton, CA",
     "width": 6000,
     "height": 4000,
     "display": "assets/gallery/optimized/174A4913.jpg.display.webp",
@@ -132,13 +153,18 @@
         "height": 1707
       }
     ],
-    "small": "assets/gallery/optimized/174A4913.jpg.small.webp"
+    "small": "assets/gallery/optimized/174A4913.jpg.small.webp",
+    "gps": {
+      "latitude": 35.542092,
+      "longitude": -120.898191
+    }
   },
   {
     "src": "assets/gallery/174A6013.jpg",
     "thumb": "assets/gallery/optimized/174A6013.jpg.thumb.webp",
     "alt": "174A6013",
     "caption": "174A6013",
+    "description": "Desert View Watchtower, Grand Canyon NP, Arizona",
     "width": 6000,
     "height": 4000,
     "display": "assets/gallery/optimized/174A6013.jpg.display.webp",
@@ -159,13 +185,18 @@
         "height": 1707
       }
     ],
-    "small": "assets/gallery/optimized/174A6013.jpg.small.webp"
+    "small": "assets/gallery/optimized/174A6013.jpg.small.webp",
+    "gps": {
+      "latitude": 36.044292,
+      "longitude": -111.826003
+    }
   },
   {
     "src": "assets/gallery/174A7055.jpg",
     "thumb": "assets/gallery/optimized/174A7055.jpg.thumb.webp",
     "alt": "174A7055",
     "caption": "174A7055",
+    "description": "Hurricane Ridge, Olympic NP, WA",
     "width": 4000,
     "height": 3847,
     "display": "assets/gallery/optimized/174A7055.jpg.display.webp",
@@ -186,13 +217,18 @@
         "height": 2462
       }
     ],
-    "small": "assets/gallery/optimized/174A7055.jpg.small.webp"
+    "small": "assets/gallery/optimized/174A7055.jpg.small.webp",
+    "gps": {
+      "latitude": 47.970392,
+      "longitude": -123.493646
+    }
   },
   {
     "src": "assets/gallery/174A7427.jpg",
     "thumb": "assets/gallery/optimized/174A7427.jpg.thumb.webp",
     "alt": "174A7427",
     "caption": "174A7427",
+    "description": "Turning Point Park, Rochester, WA",
     "width": 4000,
     "height": 6000,
     "display": "assets/gallery/optimized/174A7427.jpg.display.webp",
@@ -213,13 +249,18 @@
         "height": 2560
       }
     ],
-    "small": "assets/gallery/optimized/174A7427.jpg.small.webp"
+    "small": "assets/gallery/optimized/174A7427.jpg.small.webp",
+    "gps": {
+      "latitude": 43.230445,
+      "longitude": -77.617572
+    }
   },
   {
     "src": "assets/gallery/art_museum.jpeg",
     "thumb": "assets/gallery/optimized/art_museum.jpeg.thumb.webp",
     "alt": "Art Museum",
     "caption": "Art Museum",
+    "description": "Chongqing Art Museum, Chongqing",
     "width": 4160,
     "height": 6240,
     "display": "assets/gallery/optimized/art_museum.jpeg.display.webp",
@@ -240,13 +281,18 @@
         "height": 2560
       }
     ],
-    "small": "assets/gallery/optimized/art_museum.jpeg.small.webp"
+    "small": "assets/gallery/optimized/art_museum.jpeg.small.webp",
+    "gps": {
+      "latitude": 29.563305,
+      "longitude": 106.574166
+    }
   },
   {
     "src": "assets/gallery/cq.jpeg",
     "thumb": "assets/gallery/optimized/cq.jpeg.thumb.webp",
     "alt": "Cq",
     "caption": "Cq",
+    "description": "Hongya Cave, Chongqing",
     "width": 6240,
     "height": 4160,
     "display": "assets/gallery/optimized/cq.jpeg.display.webp",
@@ -267,13 +313,18 @@
         "height": 1707
       }
     ],
-    "small": "assets/gallery/optimized/cq.jpeg.small.webp"
+    "small": "assets/gallery/optimized/cq.jpeg.small.webp",
+    "gps": {
+      "latitude": 29.571958,
+      "longitude": 106.572275
+    }
   },
   {
     "src": "assets/gallery/dawn.jpeg",
     "thumb": "assets/gallery/optimized/dawn.jpeg.thumb.webp",
     "alt": "Dawn",
     "caption": "Dawn",
+    "description": "Lake Chao, Hefei, Anhui",
     "width": 6240,
     "height": 4160,
     "display": "assets/gallery/optimized/dawn.jpeg.display.webp",
@@ -294,13 +345,18 @@
         "height": 1707
       }
     ],
-    "small": "assets/gallery/optimized/dawn.jpeg.small.webp"
+    "small": "assets/gallery/optimized/dawn.jpeg.small.webp",
+    "gps": {
+      "latitude": 31.581522,
+      "longitude": 117.817506
+    }
   },
   {
     "src": "assets/gallery/DJI_20250403144332_0149_D (1).jpg",
     "thumb": "assets/gallery/optimized/DJI_20250403144332_0149_D (1).jpg.thumb.webp",
     "alt": "Dji 20250403144332 0149 D (1)",
     "caption": "Dji 20250403144332 0149 D (1)",
+    "description": "The Quad, University of Washington, Seattle, WA",
     "width": 8064,
     "height": 6048,
     "display": "assets/gallery/optimized/DJI_20250403144332_0149_D (1).jpg.display.webp",
@@ -321,13 +377,18 @@
         "height": 1920
       }
     ],
-    "small": "assets/gallery/optimized/DJI_20250403144332_0149_D (1).jpg.small.webp"
+    "small": "assets/gallery/optimized/DJI_20250403144332_0149_D (1).jpg.small.webp",
+    "gps": {
+      "latitude": 47.657283,
+      "longitude": -122.307222
+    }
   },
   {
     "src": "assets/gallery/DJI_20250403144806_0157_D.jpg",
     "thumb": "assets/gallery/optimized/DJI_20250403144806_0157_D.jpg.thumb.webp",
     "alt": "Dji 20250403144806 0157 D",
     "caption": "Dji 20250403144806 0157 D",
+    "description": "The Quad, University of Washington, Seattle, WA",
     "width": 8064,
     "height": 6048,
     "display": "assets/gallery/optimized/DJI_20250403144806_0157_D.jpg.display.webp",
@@ -348,13 +409,18 @@
         "height": 1920
       }
     ],
-    "small": "assets/gallery/optimized/DJI_20250403144806_0157_D.jpg.small.webp"
+    "small": "assets/gallery/optimized/DJI_20250403144806_0157_D.jpg.small.webp",
+    "gps": {
+      "latitude": 47.657801,
+      "longitude": -122.30773
+    }
   },
   {
     "src": "assets/gallery/DJI_20251004120438_0196_D.jpg",
     "thumb": "assets/gallery/optimized/DJI_20251004120438_0196_D.jpg.thumb.webp",
     "alt": "Dji 20251004120438 0196 D",
     "caption": "Dji 20251004120438 0196 D",
+    "description": "Hurricane Ridge, Olympic NP, WA",
     "width": 4032,
     "height": 3024,
     "display": "assets/gallery/optimized/DJI_20251004120438_0196_D.jpg.display.webp",
@@ -375,13 +441,18 @@
         "height": 1920
       }
     ],
-    "small": "assets/gallery/optimized/DJI_20251004120438_0196_D.jpg.small.webp"
+    "small": "assets/gallery/optimized/DJI_20251004120438_0196_D.jpg.small.webp",
+    "gps": {
+      "latitude": 47.984926,
+      "longitude": -123.459085
+    }
   },
   {
     "src": "assets/gallery/DJI_20251229164936_0003_D (1).jpg",
     "thumb": "assets/gallery/optimized/DJI_20251229164936_0003_D (1).jpg.thumb.webp",
     "alt": "Dji 20251229164936 0003 D (1)",
     "caption": "Dji 20251229164936 0003 D (1)",
+    "description": "Lake Washington, Kirkland, WA",
     "width": 8064,
     "height": 5350,
     "display": "assets/gallery/optimized/DJI_20251229164936_0003_D (1).jpg.display.webp",
@@ -402,13 +473,18 @@
         "height": 1698
       }
     ],
-    "small": "assets/gallery/optimized/DJI_20251229164936_0003_D (1).jpg.small.webp"
+    "small": "assets/gallery/optimized/DJI_20251229164936_0003_D (1).jpg.small.webp",
+    "gps": {
+      "latitude": 47.68241,
+      "longitude": -122.216757
+    }
   },
   {
     "src": "assets/gallery/IMG_0923.jpg",
     "thumb": "assets/gallery/optimized/IMG_0923.jpg.thumb.webp",
     "alt": "Img 0923",
     "caption": "Img 0923",
+    "description": "Nanyan Lake, Hefei, Anhui",
     "width": 6240,
     "height": 4160,
     "display": "assets/gallery/optimized/IMG_0923.jpg.display.webp",
@@ -429,13 +505,18 @@
         "height": 1707
       }
     ],
-    "small": "assets/gallery/optimized/IMG_0923.jpg.small.webp"
+    "small": "assets/gallery/optimized/IMG_0923.jpg.small.webp",
+    "gps": {
+      "latitude": 31.761596,
+      "longitude": 117.254835
+    }
   },
   {
     "src": "assets/gallery/IMG_1016.jpg",
     "thumb": "assets/gallery/optimized/IMG_1016.jpg.thumb.webp",
     "alt": "Img 1016",
     "caption": "Img 1016",
+    "description": "Nanyan Lake, Hefei, Anhui",
     "width": 3120,
     "height": 4160,
     "display": "assets/gallery/optimized/IMG_1016.jpg.display.webp",
@@ -456,13 +537,18 @@
         "height": 2560
       }
     ],
-    "small": "assets/gallery/optimized/IMG_1016.jpg.small.webp"
+    "small": "assets/gallery/optimized/IMG_1016.jpg.small.webp",
+    "gps": {
+      "latitude": 31.760875,
+      "longitude": 117.254243
+    }
   },
   {
     "src": "assets/gallery/IMG_7736.jpg",
     "thumb": "assets/gallery/optimized/IMG_7736.jpg.thumb.webp",
     "alt": "Img 7736",
     "caption": "Img 7736",
+    "description": "Syracuse University, Syracuse, NY",
     "width": 6240,
     "height": 4160,
     "display": "assets/gallery/optimized/IMG_7736.jpg.display.webp",
@@ -483,13 +569,18 @@
         "height": 1707
       }
     ],
-    "small": "assets/gallery/optimized/IMG_7736.jpg.small.webp"
+    "small": "assets/gallery/optimized/IMG_7736.jpg.small.webp",
+    "gps": {
+      "latitude": 43.038362,
+      "longitude": -76.137201
+    }
   },
   {
     "src": "assets/gallery/IMG_8517.jpg",
     "thumb": "assets/gallery/optimized/IMG_8517.jpg.thumb.webp",
     "alt": "Img 8517",
     "caption": "Img 8517",
+    "description": "Gold Creek Pond, Snoqualmie, WA",
     "width": 6240,
     "height": 4160,
     "display": "assets/gallery/optimized/IMG_8517.jpg.display.webp",
@@ -510,13 +601,18 @@
         "height": 1707
       }
     ],
-    "small": "assets/gallery/optimized/IMG_8517.jpg.small.webp"
+    "small": "assets/gallery/optimized/IMG_8517.jpg.small.webp",
+    "gps": {
+      "latitude": 47.399201,
+      "longitude": -121.380689
+    }
   },
   {
     "src": "assets/gallery/IMG_8706.JPG",
     "thumb": "assets/gallery/optimized/IMG_8706.JPG.thumb.webp",
     "alt": "Img 8706",
     "caption": "Img 8706",
+    "description": "Somewhere above the Pacific Ocean",
     "width": 6240,
     "height": 4160,
     "display": "assets/gallery/optimized/IMG_8706.JPG.display.webp",
@@ -537,13 +633,18 @@
         "height": 1707
       }
     ],
-    "small": "assets/gallery/optimized/IMG_8706.JPG.small.webp"
+    "small": "assets/gallery/optimized/IMG_8706.JPG.small.webp",
+    "gps": {
+      "latitude": 47.0,
+      "longitude": -140.1
+    }
   },
   {
     "src": "assets/gallery/IMG_8707.JPG",
     "thumb": "assets/gallery/optimized/IMG_8707.JPG.thumb.webp",
     "alt": "Img 8707",
     "caption": "Img 8707",
+    "description": "University District, Seattle, WA",
     "width": 6240,
     "height": 4160,
     "display": "assets/gallery/optimized/IMG_8707.JPG.display.webp",
@@ -564,13 +665,18 @@
         "height": 1707
       }
     ],
-    "small": "assets/gallery/optimized/IMG_8707.JPG.small.webp"
+    "small": "assets/gallery/optimized/IMG_8707.JPG.small.webp",
+    "gps": {
+      "latitude": 47.66149,
+      "longitude": -122.314583
+    }
   },
   {
     "src": "assets/gallery/IMG_8711.JPG",
     "thumb": "assets/gallery/optimized/IMG_8711.JPG.thumb.webp",
     "alt": "Img 8711",
     "caption": "Img 8711",
+    "description": "Gas Works Park, Seattle, WA",
     "width": 6239,
     "height": 2838,
     "display": "assets/gallery/optimized/IMG_8711.JPG.display.webp",
@@ -591,13 +697,18 @@
         "height": 1164
       }
     ],
-    "small": "assets/gallery/optimized/IMG_8711.JPG.small.webp"
+    "small": "assets/gallery/optimized/IMG_8711.JPG.small.webp",
+    "gps": {
+      "latitude": 47.644676,
+      "longitude": -122.335306
+    }
   },
   {
     "src": "assets/gallery/IMG_9187.jpg",
     "thumb": "assets/gallery/optimized/IMG_9187.jpg.thumb.webp",
     "alt": "Img 9187",
     "caption": "Img 9187",
+    "description": "Rochester, NY",
     "width": 6240,
     "height": 4160,
     "display": "assets/gallery/optimized/IMG_9187.jpg.display.webp",
@@ -618,13 +729,18 @@
         "height": 1707
       }
     ],
-    "small": "assets/gallery/optimized/IMG_9187.jpg.small.webp"
+    "small": "assets/gallery/optimized/IMG_9187.jpg.small.webp",
+    "gps": {
+      "latitude": 43.101999,
+      "longitude": -77.617488
+    }
   },
   {
     "src": "assets/gallery/mixc.jpeg",
     "thumb": "assets/gallery/optimized/mixc.jpeg.thumb.webp",
     "alt": "Mixc",
     "caption": "Mixc",
+    "description": "Mixc, Hefei, Anhui",
     "width": 4160,
     "height": 6240,
     "display": "assets/gallery/optimized/mixc.jpeg.display.webp",
@@ -645,13 +761,18 @@
         "height": 2560
       }
     ],
-    "small": "assets/gallery/optimized/mixc.jpeg.small.webp"
+    "small": "assets/gallery/optimized/mixc.jpeg.small.webp",
+    "gps": {
+      "latitude": 31.799482,
+      "longitude": 117.227892
+    }
   },
   {
     "src": "assets/gallery/moon.png",
     "thumb": "assets/gallery/optimized/moon.png.thumb.webp",
     "alt": "Moon",
     "caption": "Moon",
+    "description": "Dashu Mountain, Hefei, Anhui",
     "width": 6000,
     "height": 4000,
     "display": "assets/gallery/optimized/moon.png.display.webp",
@@ -672,13 +793,18 @@
         "height": 1707
       }
     ],
-    "small": "assets/gallery/optimized/moon.png.small.webp"
+    "small": "assets/gallery/optimized/moon.png.small.webp",
+    "gps": {
+      "latitude": 31.84029,
+      "longitude": 117.170995
+    }
   },
   {
     "src": "assets/gallery/ss.jpg",
     "thumb": "assets/gallery/optimized/ss.jpg.thumb.webp",
     "alt": "Ss",
     "caption": "Ss",
+    "description": "Pike Place Market, Seattle, WA",
     "width": 2831,
     "height": 4630,
     "display": "assets/gallery/optimized/ss.jpg.display.webp",
@@ -699,12 +825,17 @@
         "height": 2560
       }
     ],
-    "small": "assets/gallery/optimized/ss.jpg.small.webp"
+    "small": "assets/gallery/optimized/ss.jpg.small.webp",
+    "gps": {
+      "latitude": 47.609151,
+      "longitude": -122.342841
+    }
   },
   {
     "src": "assets/gallery/174A0341.jpg",
     "alt": "174A0341",
     "caption": "174A0341",
+    "description": "Steptoe Butte SP, Colfax, WA",
     "width": 6000,
     "height": 4000,
     "thumb": "assets/gallery/optimized/174A0341.jpg.thumb.webp",
@@ -726,12 +857,17 @@
         "height": 1707
       }
     ],
-    "small": "assets/gallery/optimized/174A0341.jpg.small.webp"
+    "small": "assets/gallery/optimized/174A0341.jpg.small.webp",
+    "gps": {
+      "latitude": 47.034283,
+      "longitude": -117.301971
+    }
   },
   {
     "src": "assets/gallery/174A2276.jpg",
     "alt": "174A2276",
     "caption": "174A2276",
+    "description": "High Bluff Overlook, CA",
     "width": 4000,
     "height": 6000,
     "thumb": "assets/gallery/optimized/174A2276.jpg.thumb.webp",
@@ -753,12 +889,17 @@
         "height": 2560
       }
     ],
-    "small": "assets/gallery/optimized/174A2276.jpg.small.webp"
+    "small": "assets/gallery/optimized/174A2276.jpg.small.webp",
+    "gps": {
+      "latitude": 41.510514,
+      "longitude": -124.081086
+    }
   },
   {
     "src": "assets/gallery/174A2622.jpg",
     "alt": "174A2622",
     "caption": "174A2622",
+    "description": "Bixby Bridge, Big Sur, CA",
     "width": 4000,
     "height": 6000,
     "thumb": "assets/gallery/optimized/174A2622.jpg.thumb.webp",
@@ -780,12 +921,17 @@
         "height": 2560
       }
     ],
-    "small": "assets/gallery/optimized/174A2622.jpg.small.webp"
+    "small": "assets/gallery/optimized/174A2622.jpg.small.webp",
+    "gps": {
+      "latitude": 36.372176,
+      "longitude": -121.904676
+    }
   },
   {
     "src": "assets/gallery/174A2752.jpg",
     "alt": "174A2752",
     "caption": "174A2752",
+    "description": "McWay Falls, Big Sur, CA",
     "width": 4000,
     "height": 6000,
     "thumb": "assets/gallery/optimized/174A2752.jpg.thumb.webp",
@@ -807,12 +953,17 @@
         "height": 2560
       }
     ],
-    "small": "assets/gallery/optimized/174A2752.jpg.small.webp"
+    "small": "assets/gallery/optimized/174A2752.jpg.small.webp",
+    "gps": {
+      "latitude": 36.158654,
+      "longitude": -121.672323
+    }
   },
   {
     "src": "assets/gallery/174A8688.jpg",
     "alt": "174A8688",
     "caption": "174A8688",
+    "description": "Newcastle Golf Course, Newcastle, WA",
     "width": 4000,
     "height": 6000,
     "thumb": "assets/gallery/optimized/174A8688.jpg.thumb.webp",
@@ -834,12 +985,17 @@
         "height": 2560
       }
     ],
-    "small": "assets/gallery/optimized/174A8688.jpg.small.webp"
+    "small": "assets/gallery/optimized/174A8688.jpg.small.webp",
+    "gps": {
+      "latitude": 47.535786,
+      "longitude": -122.144388
+    }
   },
   {
     "src": "assets/gallery/174A9364.jpg",
     "alt": "174A9364",
     "caption": "174A9364",
+    "description": "Tidal Basin, D.C.",
     "width": 4000,
     "height": 6000,
     "thumb": "assets/gallery/optimized/174A9364.jpg.thumb.webp",
@@ -861,12 +1017,17 @@
         "height": 2560
       }
     ],
-    "small": "assets/gallery/optimized/174A9364.jpg.small.webp"
+    "small": "assets/gallery/optimized/174A9364.jpg.small.webp",
+    "gps": {
+      "latitude": 38.880346,
+      "longitude": -77.03844
+    }
   },
   {
     "src": "assets/gallery/174A9763.jpg",
     "alt": "174A9763",
     "caption": "174A9763",
+    "description": "Tidal Basin, D.C.",
     "width": 4000,
     "height": 6000,
     "thumb": "assets/gallery/optimized/174A9763.jpg.thumb.webp",
@@ -888,12 +1049,17 @@
         "height": 2560
       }
     ],
-    "small": "assets/gallery/optimized/174A9763.jpg.small.webp"
+    "small": "assets/gallery/optimized/174A9763.jpg.small.webp",
+    "gps": {
+      "latitude": 38.88322,
+      "longitude": -77.042101
+    }
   },
   {
     "src": "assets/gallery/DJI_20260227174302_0454_D.jpg",
     "alt": "DJI 20260227174302 0454 D",
     "caption": "DJI 20260227174302 0454 D",
+    "description": "Ontario Beach Park, Rochester, NY",
     "width": 4032,
     "height": 3024,
     "thumb": "assets/gallery/optimized/DJI_20260227174302_0454_D.jpg.thumb.webp",
@@ -915,12 +1081,17 @@
         "height": 1920
       }
     ],
-    "small": "assets/gallery/optimized/DJI_20260227174302_0454_D.jpg.small.webp"
+    "small": "assets/gallery/optimized/DJI_20260227174302_0454_D.jpg.small.webp",
+    "gps": {
+      "latitude": 43.260151,
+      "longitude": -77.605346
+    }
   },
   {
     "src": "assets/gallery/DJI_20260603205753_0493_D.jpg",
     "alt": "DJI 20260603205753 0493 D",
     "caption": "DJI 20260603205753 0493 D",
+    "description": "Rialto Beach, Olympic NP, WA",
     "width": 4032,
     "height": 3024,
     "thumb": "assets/gallery/optimized/DJI_20260603205753_0493_D.jpg.thumb.webp",
@@ -942,12 +1113,17 @@
         "height": 1920
       }
     ],
-    "small": "assets/gallery/optimized/DJI_20260603205753_0493_D.jpg.small.webp"
+    "small": "assets/gallery/optimized/DJI_20260603205753_0493_D.jpg.small.webp",
+    "gps": {
+      "latitude": 47.920808,
+      "longitude": -124.639167
+    }
   },
   {
     "src": "assets/gallery/DJI_20260718161742_0022_D.jpg",
     "alt": "DJI 20260718161742 0022 D",
     "caption": "DJI 20260718161742 0022 D",
+    "description": "Bixby Bridge, Big Sur, CA",
     "width": 4032,
     "height": 3024,
     "thumb": "assets/gallery/optimized/DJI_20260718161742_0022_D.jpg.thumb.webp",
@@ -969,6 +1145,10 @@
         "height": 1920
       }
     ],
-    "small": "assets/gallery/optimized/DJI_20260718161742_0022_D.jpg.small.webp"
+    "small": "assets/gallery/optimized/DJI_20260718161742_0022_D.jpg.small.webp",
+    "gps": {
+      "latitude": 36.388654,
+      "longitude": -121.905165
+    }
   }
 ]

@@ -26,6 +26,20 @@ $galleryDir = Join-Path $SiteRoot "assets/gallery"
 $thumbDir = Join-Path $galleryDir "thumbs"
 $manifestPath = Join-Path $galleryDir "gallery.json"
 
+# Keep hand-written locations even when using the legacy non-Python builder.
+$descriptionsBySource = @{}
+$gpsBySource = @{}
+if (Test-Path -LiteralPath $manifestPath) {
+  foreach ($item in @(Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json)) {
+    if ($item.src) {
+      $descriptionsBySource[[string]$item.src] = [string]$item.description
+      if ($item.PSObject.Properties.Name -contains "gps") {
+        $gpsBySource[[string]$item.src] = $item.gps
+      }
+    }
+  }
+}
+
 if (-not (Test-Path $galleryDir)) {
   Write-Host "Gallery directory not found: $galleryDir"
   exit 0
@@ -124,12 +138,22 @@ foreach ($file in $sourceFiles) {
   $srcRel = "assets/gallery/$($file.Name)"
   $thumbRel = "assets/gallery/thumbs/$thumbName"
   $title = Get-TitleFromName -name $file.Name
+  $description = ""
+  if ($descriptionsBySource.ContainsKey($srcRel)) {
+    $description = $descriptionsBySource[$srcRel]
+  }
+  $gps = [ordered]@{ latitude = $null; longitude = $null }
+  if ($gpsBySource.ContainsKey($srcRel)) {
+    $gps = $gpsBySource[$srcRel]
+  }
 
   $items += [ordered]@{
     src = $srcRel
     thumb = $thumbRel
     alt = $title
     caption = $title
+    description = $description
+    gps = $gps
   }
 }
 

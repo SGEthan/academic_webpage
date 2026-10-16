@@ -64,6 +64,7 @@ const documentStub = {
   querySelectorAll: () => [],
   addEventListener(name, handler) { (this.listeners[name] ||= []).push(handler); },
   fire(name, event) { (this.listeners[name] || []).forEach((handler) => handler(event)); },
+  dispatchEvent(event) { this.fire(event.type, event); },
 };
 let currentTimer = null;
 let timerDelay = null;
@@ -78,7 +79,7 @@ const windowStub = {
 const source = readSource("script.js");
 const body = source.slice(source.indexOf("{") + 1, source.lastIndexOf("  // ---------------------------------------------------------------------------\n  // Init"));
 const fetchStub = async () => ({ ok: true, text: async () => readSource("bibtex/yichuan_deng.bib") });
-const site = new Function("document", "window", "fetch", body + "\nreturn { parseBibtexEntries, renderPublicationItem, buildCiteBibtex, isSelectedEntry, parseContentFrontmatter, populateContent, trapDialogFocus, initGalleryCarousel, groupPublicationsByCategory, renderGroupedPublications, initPublicationsFromBibtex };")(documentStub, windowStub, fetchStub);
+const site = new Function("document", "window", "fetch", "CustomEvent", body + "\nreturn { parseBibtexEntries, renderPublicationItem, buildCiteBibtex, isSelectedEntry, parseContentFrontmatter, populateContent, trapDialogFocus, initGalleryCarousel, initGalleryLightbox, galleryDescription, groupPublicationsByCategory, renderGroupedPublications, initPublicationsFromBibtex };")(documentStub, windowStub, fetchStub, function(type, options) { this.type = type; this.detail = options.detail; });
 
 const entries = site.parseBibtexEntries(readSource("bibtex/yichuan_deng.bib"));
 const selected = entries.filter(site.isSelectedEntry);
@@ -185,6 +186,16 @@ const slides = [0, 1, 2].map(() => {
   slide.append(trigger);
   return slide;
 });
+slides[0].querySelector(".gallery-trigger").setAttribute("data-description", "Seattle, Washington, USA");
+slides[2].querySelector(".gallery-trigger").setAttribute("data-description", "京都，日本");
+const previewCaptions = ["Seattle, Washington, USA", "", "京都，日本"].map((text, i) => {
+  if (!text) return null;
+  const caption = new Element("figcaption");
+  caption.className = "gallery-preview-description";
+  caption.textContent = text;
+  slides[i].appendChild(caption);
+  return caption;
+});
 track.append(...slides);
 const querySlides = track.querySelectorAll.bind(track);
 track.querySelectorAll = (selector) => selector.includes("gallery-card:not") ? slides : querySlides(selector);
@@ -200,9 +211,15 @@ windowStub.EmblaCarousel = () => ({
   on(name, handler) { events[name] = handler; },
 });
 site.initGalleryCarousel();
-assert(currentTimer && timerDelay === 1000, "Autoplay should retain the one-second interval");
+assert(currentTimer && timerDelay === 2000, "Autoplay should use the two-second interval");
+assert(root.classList.contains("has-descriptions"), "The viewport should reserve caption space when any photo has a description");
 currentTimer();
 assert(steps === 1, "Autoplay should advance exactly one slide per tick");
+assert(slides[index].querySelector(".gallery-preview-description") === null, "A photo without a description must have no stale caption");
+assert(previewCaptions[0].textContent === "Seattle, Washington, USA", "Sliding away must not replace or delete the outgoing caption");
+currentTimer();
+assert(slides[index].querySelector(".gallery-preview-description") === previewCaptions[2], "Autoplay must keep each caption physically attached to its own slide");
+assert(previewCaptions[2].textContent === "京都，日本", "Slide captions must retain Unicode descriptions");
 root.fire("mouseenter");
 assert(!currentTimer, "Hover should pause autoplay");
 root.fire("mouseleave");
@@ -225,7 +242,50 @@ track.fire("click", {
   preventDefault() { clickPrevented = true; },
 });
 assert(clickPrevented && index === 0, "Side-slide selection should consume the click before the lightbox listener");
-log("PASS: selected publications, authors/co-first/Cite, email, affiliation, modal focus, one-second autoplay, side-slide click");
+assert(slides[index].querySelector(".gallery-preview-description") === previewCaptions[0], "Manual slide selection must preserve the original caption node");
+elements["gallery-prev"].fire("click");
+assert(index === 2 && slides[index].querySelector(".gallery-preview-description") === previewCaptions[2], "Backward looping must move the matching photo/caption pair");
+elements["gallery-next"].fire("click");
+assert(index === 0 && slides[index].querySelector(".gallery-preview-description") === previewCaptions[0], "Forward looping must keep the matching photo/caption pair");
+slides.forEach((slide) => slide.querySelector(".gallery-trigger").removeAttribute("data-description"));
+site.initGalleryCarousel();
+assert(!root.classList.contains("has-descriptions"), "A gallery without descriptions must not reserve an empty caption row");
+log("PASS: selected publications, authors/co-first/Cite, email, affiliation, modal focus, two-second autoplay, attached captions through autoplay/manual/loop navigation, side-slide click");
+
+assert(site.galleryDescription({ description: "  Seattle, WA  " }) === "Seattle, WA", "Descriptions should trim surrounding whitespace");
+assert([{}, { description: "   " }, { description: null }, { description: {} }].every((item) => site.galleryDescription(item) === ""), "Missing, blank, and non-text descriptions should be ignored");
+const lightbox = elements.lightbox = new Element();
+const backdrop = new Element();
+backdrop.className = "lightbox-backdrop";
+lightbox.appendChild(backdrop);
+const lightboxImage = elements["lightbox-image"] = new Element("img");
+const lightboxCaption = elements["lightbox-caption"] = new Element("p");
+for (const id of ["lightbox-close", "lightbox-prev", "lightbox-next"]) elements[id] = new Element("button");
+const lightboxTriggers = ["Kyoto, Japan", "", "<b>Location text</b>"].map((description, i) => {
+  const trigger = new Element("button");
+  trigger.className = "gallery-trigger";
+  trigger.setAttribute("data-description", description);
+  trigger.setAttribute("data-full-src", `photo-${i}.webp`);
+  trigger.setAttribute("data-caption", `filename-${i}`);
+  trigger.ancestors = { ".gallery-trigger": trigger };
+  trigger.appendChild(new Element("img"));
+  return trigger;
+});
+documentStub.querySelectorAll = (selector) => selector === ".gallery-trigger" ? lightboxTriggers : [];
+const testLightboxApi = site.initGalleryLightbox();
+documentStub.fire("click", { target: lightboxTriggers[0], defaultPrevented: false });
+assert(!lightboxCaption.hidden && lightboxCaption.textContent === "Kyoto, Japan", "Lightbox should display the photo's location");
+elements["lightbox-next"].fire("click");
+assert(lightboxCaption.hidden && lightboxCaption.textContent === "", "Lightbox should hide empty descriptions instead of showing filenames");
+elements["lightbox-next"].fire("click");
+assert(lightboxCaption.textContent === "<b>Location text</b>" && lightboxCaption.children.length === 0, "Descriptions must remain literal text, never HTML");
+elements["lightbox-prev"].fire("click");
+assert(lightboxCaption.hidden, "Lightbox description visibility should update in either direction");
+elements["lightbox-close"].fire("click");
+assert(testLightboxApi.openBySrc("photo-0.webp") && lightboxImage.src === "photo-0.webp", "Map selections should open the right photo regardless of DOM order");
+elements["lightbox-close"].fire("click");
+assert(!testLightboxApi.openBySrc("unknown.webp"), "Unknown map photos must not open an unrelated image");
+log("PASS: description normalization, lightbox locations, empty-description hiding, and safe plain text");
 
 const allContainer = new Element();
 allContainer.id = "all-publications";
