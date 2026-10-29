@@ -79,7 +79,7 @@ const windowStub = {
 const source = readSource("script.js");
 const body = source.slice(source.indexOf("{") + 1, source.lastIndexOf("  // ---------------------------------------------------------------------------\n  // Init"));
 const fetchStub = async () => ({ ok: true, text: async () => readSource("bibtex/yichuan_deng.bib") });
-const site = new Function("document", "window", "fetch", "CustomEvent", body + "\nreturn { parseBibtexEntries, renderPublicationItem, buildCiteBibtex, isSelectedEntry, parseContentFrontmatter, populateContent, trapDialogFocus, initGalleryCarousel, initGalleryLightbox, galleryDescription, groupPublicationsByCategory, renderGroupedPublications, initPublicationsFromBibtex };")(documentStub, windowStub, fetchStub, function(type, options) { this.type = type; this.detail = options.detail; });
+const site = new Function("document", "window", "fetch", "CustomEvent", body + "\nreturn { parseBibtexEntries, renderPublicationItem, buildCiteBibtex, isSelectedEntry, parseContentFrontmatter, markdownToHtml, populateContent, trapDialogFocus, initGalleryCarousel, initGalleryLightbox, galleryDescription, groupPublicationsByCategory, renderGroupedPublications, initPublicationsFromBibtex };")(documentStub, windowStub, fetchStub, function(type, options) { this.type = type; this.detail = options.detail; });
 
 const entries = site.parseBibtexEntries(readSource("bibtex/yichuan_deng.bib"));
 const selected = entries.filter(site.isSelectedEntry);
@@ -154,8 +154,15 @@ assert(card.className === "pub-item", "Default/homepage rendering should keep th
 
 elements["contact-row"] = new Element();
 elements["profile-affiliation"] = new Element();
-const { meta } = site.parseContentFrontmatter(readSource("content.md"));
+elements["research-interests"] = new Element();
+const { meta, body: profileBody } = site.parseContentFrontmatter(readSource("content.md"));
+const profileHtml = site.markdownToHtml(profileBody);
+const fallbackAbout = readSource("index.html").match(/<div class="hero-about" id="about-text">([\s\S]*?)<\/div>/)[1];
+assert(profileHtml.includes('I am a Ph.D. student at the University of Washington, advised by Prof. <a href="https://homes.cs.washington.edu/~shapiro/">Linda Shapiro</a>. My research lies'), "Advisor attribution must flow from the Ph.D. introduction into the research description and retain the supplied homepage link");
+assert(profileHtml.match(/<p class="lead">[\s\S]*?<\/p>/g).join("\n") === fallbackAbout.match(/<p class="lead">[\s\S]*?<\/p>/g).join("\n"), "The HTML fallback and Markdown bio must stay identical");
+assert(readSource("index.html").includes("<li>Spatial Reasoning</li>") && !readSource("index.html").includes("<li>Visual Understanding</li>"), "The initial HTML research list must use Spatial Reasoning");
 site.populateContent(meta, "");
+assert(elements["research-interests"].children.map((item) => item.textContent).join("|") === "3D Computer Vision|Spatial Reasoning|Generative Model Training & Fine-tuning", "The dynamic research list must use Spatial Reasoning and keep the other interests unchanged");
 assert(elements["contact-row"].children[0].href === "mailto:ycdeng@cs.washington.edu", "Email must use a valid mailto address");
 assert(elements["profile-affiliation"].textContent === "University of Washington", "Hero affiliation should use the content metadata");
 

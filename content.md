@@ -10,7 +10,7 @@ footer: © 2026 Yichuan Deng • University of Washington
 
 research_interests:
   - 3D Computer Vision
-  - Visual Understanding
+  - Spatial Reasoning
   - Generative Model Training & Fine-tuning
 
 education:
@@ -32,7 +32,7 @@ education:
     logo_alt: University of Science and Technology of China logo
 ---
 
-My research lies at the intersection of 3D computer vision, vision-language models, and embodied AI. I am particularly interested in building structured and persistent representations of the physical world that enable models to ground language, maintain memory over long-horizon visual streams, and perform spatial reasoning.
+I am a Ph.D. student at the University of Washington, advised by Prof. [Linda Shapiro](https://homes.cs.washington.edu/~shapiro/). My research lies at the intersection of 3D computer vision, vision-language models, and embodied AI. I am particularly interested in building structured and persistent representations of the physical world that enable models to ground language, maintain memory over long-horizon visual streams, and perform spatial reasoning.
 
 During my undergraduate studies and the first two years of my Ph.D., I worked primarily on theoretical computer science, with a focus on data structures, numerical linear algebra, and algorithms. I received my B.Eng. in Computer Science and Technology from the School of the Gifted Young at the University of Science and Technology of China (USTC).
 
