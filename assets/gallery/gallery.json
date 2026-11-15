@@ -1150,5 +1150,37 @@
       "latitude": 36.388654,
       "longitude": -121.905165
     }
+  },
+  {
+    "src": "assets/gallery/174A3462.jpg",
+    "alt": "174A3462",
+    "caption": "174A3462",
+    "description": "Letchworth SP, NY",
+    "gps": {
+      "latitude": 42.58816761365795,
+      "longitude": -78.03526495773191
+    },
+    "width": 4000,
+    "height": 6000,
+    "variants": [
+      {
+        "src": "assets/gallery/optimized/174A3462.jpg.small.webp",
+        "width": 533,
+        "height": 800
+      },
+      {
+        "src": "assets/gallery/optimized/174A3462.jpg.thumb.webp",
+        "width": 1067,
+        "height": 1600
+      },
+      {
+        "src": "assets/gallery/optimized/174A3462.jpg.display.webp",
+        "width": 1707,
+        "height": 2560
+      }
+    ],
+    "small": "assets/gallery/optimized/174A3462.jpg.small.webp",
+    "thumb": "assets/gallery/optimized/174A3462.jpg.thumb.webp",
+    "display": "assets/gallery/optimized/174A3462.jpg.display.webp"
   }
 ]
